@@ -48,7 +48,7 @@ export default function MrInvestor() {
     setMessages(newMessages);
     if (!isPremium) setFreeQuestions((q) => q - 1);
     try {
-      const response = await fetch("https://api.anthropic.com/v1/messages", {
+      const response = await fetch("/api/chat", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -138,4 +138,4 @@ export default function MrInvestor() {
       <style>{`@keyframes pulse { 0%, 100% { opacity: 0.3; } 50% { opacity: 1; } }`}</style>
     </div>
   );
-              }
+            }
