@@ -6,7 +6,7 @@ const supabase = createClient(
   import.meta.env.VITE_SUPABASE_ANON_KEY
 );
 
-const SYSTEM_PROMPT = `Du bist Mr. Investor, ein freundlicher aber direkter KI-Finanzberater für Deutsche. Du hilfst bei:
+const SYSTEM_PROMPT = `Du bist Mr. Investor, ein freundlicher aber direkter KI-Finanzassistent für Deutsche. Du hilfst bei:
 - Persönlicher Finanzplanung und Budgetierung
 - Investing-Fragen (ETFs, S&P 500, Aktien, Trade Republic etc.)
 - Sparstrategien und Zinseszins-Berechnungen
@@ -30,7 +30,10 @@ export default function MrInvestor() {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
-  const [freeQuestions, setFreeQuestions] = useState(FREE_LIMIT);
+  const [freeQuestions, setFreeQuestions] = useState(() => {
+    const used = parseInt(localStorage.getItem('fq') || '0');
+    return Math.max(0, FREE_LIMIT - used);
+  });
   const [isPremium, setIsPremium] = useState(false);
   const [showUpgrade, setShowUpgrade] = useState(false);
   const [showWelcome, setShowWelcome] = useState(true);
@@ -70,7 +73,7 @@ export default function MrInvestor() {
     
     if (data) {
       setIsPremium(data.is_premium || false);
-      setFreeQuestions(Math.max(0, FREE_LIMIT - (data.free_questions_used || 0)));
+      setFreeQuestions(data.is_premium ? 999 : Math.max(0, FREE_LIMIT - (data.free_questions_used || 0)));
     }
   };
 
@@ -86,9 +89,7 @@ export default function MrInvestor() {
       } else {
         const { error } = await supabase.auth.signUp({ email, password });
         if (error) setAuthError(error.message);
-        else {
-          setAuthError("✅ Bestätigungs-Email gesendet! Bitte prüfe dein Postfach.");
-        }
+        else setAuthError("✅ Bestätigungs-Email gesendet! Bitte prüfe dein Postfach.");
       }
     } catch {
       setAuthError("Ein Fehler ist aufgetreten.");
@@ -100,7 +101,8 @@ export default function MrInvestor() {
     await supabase.auth.signOut();
     setUser(null);
     setIsPremium(false);
-    setFreeQuestions(FREE_LIMIT);
+    const used = parseInt(localStorage.getItem('fq') || '0');
+    setFreeQuestions(Math.max(0, FREE_LIMIT - used));
     setMessages([]);
     setShowWelcome(true);
   };
@@ -125,6 +127,9 @@ export default function MrInvestor() {
       if (user) {
         const { data: profile } = await supabase.from("profiles").select("free_questions_used").eq("id", user.id).single();
         await supabase.from("profiles").upsert({ id: user.id, free_questions_used: (profile?.free_questions_used || 0) + 1 });
+      } else {
+        const used = parseInt(localStorage.getItem('fq') || '0');
+        localStorage.setItem('fq', used + 1);
       }
     }
 
@@ -163,7 +168,7 @@ export default function MrInvestor() {
           </div>
         </div>
         <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-          {!isPremium && user && <div style={{ fontSize: "12px", color: freeQuestions <= 1 ? "#e07050" : "#888", background: "#1a1a25", padding: "4px 10px", borderRadius: "20px", border: `1px solid ${freeQuestions <= 1 ? "#e07050" : "#2a2a3a"}` }}>{freeQuestions} / {FREE_LIMIT} gratis</div>}
+          {!isPremium && <div style={{ fontSize: "12px", color: freeQuestions <= 1 ? "#e07050" : "#888", background: "#1a1a25", padding: "4px 10px", borderRadius: "20px", border: `1px solid ${freeQuestions <= 1 ? "#e07050" : "#2a2a3a"}` }}>{freeQuestions} / {FREE_LIMIT} gratis</div>}
           {isPremium && <div style={{ fontSize: "12px", color: "#c9a84c", background: "rgba(201,168,76,0.1)", padding: "4px 12px", borderRadius: "20px", border: "1px solid #c9a84c" }}>✦ PREMIUM</div>}
           {user ? (
             <>
@@ -267,3 +272,4 @@ export default function MrInvestor() {
     </div>
   );
 }
+
