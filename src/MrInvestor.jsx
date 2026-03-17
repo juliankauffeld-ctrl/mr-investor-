@@ -294,10 +294,10 @@ export default function MrInvestor() {
         <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
           <LangSwitch />
           {!isPremium && <div style={{ fontSize: "12px", color: freeQuestions <= 1 ? "#e07050" : "#888", background: "#1a1a25", padding: "4px 10px", borderRadius: "20px", border: `1px solid ${freeQuestions <= 1 ? "#e07050" : "#2a2a3a"}` }}>{freeQuestions} / {FREE_LIMIT} {t.freeOf}</div>}
-          {isPremium && <div style={{ display: "flex", alignItems: "center", gap: "8px" }}><div style={{ fontSize: "12px", color: "#c9a84c", background: "rgba(201,168,76,0.1)", padding: "4px 12px", borderRadius: "20px", border: "1px solid #c9a84c" }}>{t.premium}</div><button onClick={() => window.open(STRIPE_PORTAL, '_blank')} style={{ fontSize: "11px", color: "#666", background: "transparent", border: "1px solid #2a2a3a", padding: "4px 10px", borderRadius: "20px", cursor: "pointer" }}>{t.manageAbo}</button></div>}
-          {messages.length > 0 && <button onClick={clearHistory} style={{ background: "transparent", color: "#555", border: "1px solid #2a2a3a", padding: "6px 12px", borderRadius: "20px", cursor: "pointer", fontSize: "11px" }}>{t.deleteHistory}</button>}
+          {isPremium && <div style={{ display: "flex", alignItems: "center", gap: "8px" }}><div style={{ fontSize: "12px", color: "#c9a84c", background: "rgba(201,168,76,0.1)", padding: "4px 12px", borderRadius: "20px", border: "1px solid #c9a84c" }}>{t.premium}</div><button onClick={() => window.open(STRIPE_PORTAL, '_blank')} style={{ fontSize: "11px", color: "#666", background: "transparent", border: "1px solid #2a2a3a", padding: "4px 10px", borderRadius: "20px", cursor: "pointer" }}>⚙️</button></div>}
+          {messages.length > 0 && <button onClick={clearHistory} style={{ background: "transparent", color: "#555", border: "1px solid #2a2a3a", padding: "6px 12px", borderRadius: "20px", cursor: "pointer", fontSize: "11px" }}>🗑️</button>}
           {!isPremium && <button onClick={() => setShowUpgrade(true)} style={{ background: gold, color: "#0a0a0f", border: "none", padding: "6px 14px", borderRadius: "20px", cursor: "pointer", fontSize: "12px", fontWeight: "bold" }}>{t.upgrade}</button>}
-          <button onClick={handleLogout} style={{ background: "transparent", color: "#666", border: "1px solid #2a2a3a", padding: "6px 12px", borderRadius: "20px", cursor: "pointer", fontSize: "12px" }}>{t.logout}</button>
+          <button onClick={handleLogout} style={{ background: "transparent", color: "#666", border: "1px solid #2a2a3a", padding: "6px 12px", borderRadius: "20px", cursor: "pointer", fontSize: "12px" }}>↪</button>
         </div>
       </div>
 
@@ -378,4 +378,3 @@ export default function MrInvestor() {
     </div>
   );
 }
-        
