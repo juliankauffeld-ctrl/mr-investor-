@@ -8,7 +8,7 @@ const supabase = createClient(
 
 const STRIPE_LINK = "https://buy.stripe.com/cNi6oAaZt7YK6Br6pr38401";
 const STRIPE_PORTAL = "https://billing.stripe.com/p/login/9B67sEebF2Eq9NDcNP38400";
-const FREE_LIMIT = 3;
+const FREE_LIMIT = 5;
 
 const translations = {
   de: {
@@ -23,8 +23,8 @@ const translations = {
     premium: "✦ PREMIUM",
     manageAbo: "Abo verwalten",
     deleteHistory: "Verlauf löschen",
-    freeOf: "gratis",
-    limitReached: "Gratis-Limit erreicht.",
+    freeOf: "heute",
+    limitReached: "Tageslimit erreicht. Morgen wieder 5 Fragen gratis!",
     upgradeNow: "JETZT UPGRADEN – 9,99€/Monat",
     placeholder: "Frage Mr. Investor...",
     disclaimer: "Kein lizenzierter Finanzberater.",
@@ -32,7 +32,7 @@ const translations = {
     agb: "AGB",
     datenschutz: "Datenschutz",
     freeRegister: "Kostenlos registrieren",
-    freeInfo: "3 kostenlose Fragen · Premium ab 9,99€/Monat",
+    freeInfo: "5 kostenlose Fragen täglich · Premium ab 9,99€/Monat",
     emailPlaceholder: "Email",
     passwordPlaceholder: "Passwort",
     loginError: "Ein Fehler ist aufgetreten.",
@@ -62,8 +62,8 @@ const translations = {
     premium: "✦ PREMIUM",
     manageAbo: "Manage subscription",
     deleteHistory: "Clear history",
-    freeOf: "free",
-    limitReached: "Free limit reached.",
+    freeOf: "today",
+    limitReached: "Daily limit reached. Come back tomorrow for 5 more free questions!",
     upgradeNow: "UPGRADE NOW – €9.99/month",
     placeholder: "Ask Mr. Investor...",
     disclaimer: "Not a licensed financial advisor.",
@@ -71,7 +71,7 @@ const translations = {
     agb: "Terms",
     datenschutz: "Privacy",
     freeRegister: "Register for free",
-    freeInfo: "3 free questions · Premium from €9.99/month",
+    freeInfo: "5 free questions daily · Premium from €9.99/month",
     emailPlaceholder: "Email",
     passwordPlaceholder: "Password",
     loginError: "An error occurred.",
@@ -98,32 +98,24 @@ const ImpressumDE = () => (
     <p>Julian Kauffeld<br />Menteweg 3<br />31675 Bückeburg<br />Deutschland</p>
     <h3 style={{ color: "#c9a84c", margin: "20px 0 8px" }}>Kontakt</h3>
     <p>E-Mail: julian.kauffeld@gmx.de</p>
-    <h3 style={{ color: "#c9a84c", margin: "20px 0 8px" }}>Hinweis gemäß § 36 VSBG</h3>
-    <p>Wir sind nicht bereit oder verpflichtet, an Streitbeilegungsverfahren vor einer Verbraucherschlichtungsstelle teilzunehmen.</p>
     <h3 style={{ color: "#c9a84c", margin: "20px 0 8px" }}>Haftungsausschluss</h3>
-    <p>Mr. Investor ist ein KI-gestützter Finanzassistent und ersetzt keine professionelle Finanzberatung. Alle Inhalte dienen nur zu Informationszwecken und stellen keine Anlageberatung dar. Der Betreiber übernimmt keine Haftung für finanzielle Entscheidungen, die auf Basis der bereitgestellten Informationen getroffen werden.</p>
-    <h3 style={{ color: "#c9a84c", margin: "20px 0 8px" }}>Urheberrecht</h3>
-    <p>Die durch den Seitenbetreiber erstellten Inhalte und Werke auf dieser Website unterliegen dem deutschen Urheberrecht.</p>
+    <p>Mr. Investor ist ein KI-gestützter Finanzassistent und ersetzt keine professionelle Finanzberatung. Alle Inhalte dienen nur zu Informationszwecken.</p>
   </div>
 );
 
 const AGBDE = () => (
   <div style={{ color: "#e8e0d0", lineHeight: "1.8" }}>
-    <h2 style={{ color: "#f0d080", letterSpacing: "2px", marginBottom: "24px" }}>ALLGEMEINE GESCHÄFTSBEDINGUNGEN</h2>
+    <h2 style={{ color: "#f0d080", letterSpacing: "2px", marginBottom: "24px" }}>AGB</h2>
     <h3 style={{ color: "#c9a84c", marginBottom: "8px" }}>§ 1 Geltungsbereich</h3>
-    <p>Diese AGB gelten für die Nutzung von Mr. Investor (mr-investor.com), betrieben von Julian Kauffeld, Menteweg 3, 31675 Bückeburg.</p>
+    <p>Diese AGB gelten für die Nutzung von Mr. Investor (mr-investor.com), betrieben von Julian Kauffeld.</p>
     <h3 style={{ color: "#c9a84c", margin: "20px 0 8px" }}>§ 2 Leistungsbeschreibung</h3>
-    <p>Mr. Investor bietet einen KI-gestützten Finanzassistenten. Die kostenlose Version umfasst 3 Fragen. Das Premium-Abonnement (9,99€/Monat) bietet unbegrenzte Nutzung und Chat-Verlauf.</p>
+    <p>Mr. Investor bietet einen KI-gestützten Finanzassistenten. Die kostenlose Version umfasst 5 Fragen täglich. Das Premium-Abonnement (9,99€/Monat) bietet unbegrenzte Nutzung.</p>
     <h3 style={{ color: "#c9a84c", margin: "20px 0 8px" }}>§ 3 Kein Finanzrat</h3>
-    <p>Mr. Investor ist kein lizenzierter Finanzberater. Alle Inhalte dienen nur zu Informationszwecken und stellen keine Anlageberatung im Sinne des WpHG dar. Nutzer treffen finanzielle Entscheidungen auf eigene Verantwortung.</p>
-    <h3 style={{ color: "#c9a84c", margin: "20px 0 8px" }}>§ 4 Abonnement & Kündigung</h3>
-    <p>Das Premium-Abonnement verlängert sich monatlich automatisch. Eine Kündigung ist jederzeit möglich über das Kundenportal oder per E-Mail an julian.kauffeld@gmx.de und wird zum Ende des bezahlten Zeitraums wirksam.</p>
+    <p>Mr. Investor ist kein lizenzierter Finanzberater. Alle Inhalte dienen nur zu Informationszwecken.</p>
+    <h3 style={{ color: "#c9a84c", margin: "20px 0 8px" }}>§ 4 Kündigung</h3>
+    <p>Das Abonnement verlängert sich monatlich. Kündigung jederzeit möglich per E-Mail an julian.kauffeld@gmx.de</p>
     <h3 style={{ color: "#c9a84c", margin: "20px 0 8px" }}>§ 5 Widerrufsrecht</h3>
-    <p>Sie haben das Recht, binnen 14 Tagen ohne Angabe von Gründen diesen Vertrag zu widerrufen. Kontakt: julian.kauffeld@gmx.de</p>
-    <h3 style={{ color: "#c9a84c", margin: "20px 0 8px" }}>§ 6 Haftung</h3>
-    <p>Eine Haftung für finanzielle Verluste aufgrund der Nutzung von Mr. Investor wird ausgeschlossen. Der Dienst wird ohne Garantie auf Verfügbarkeit bereitgestellt.</p>
-    <h3 style={{ color: "#c9a84c", margin: "20px 0 8px" }}>§ 7 Änderungen</h3>
-    <p>Der Betreiber behält sich vor, diese AGB jederzeit zu ändern. Nutzer werden per E-Mail informiert.</p>
+    <p>14 Tage Widerrufsrecht. Kontakt: julian.kauffeld@gmx.de</p>
   </div>
 );
 
@@ -133,17 +125,13 @@ const DatenschutzDE = () => (
     <h3 style={{ color: "#c9a84c", marginBottom: "8px" }}>1. Verantwortlicher</h3>
     <p>Julian Kauffeld<br />Menteweg 3, 31675 Bückeburg<br />E-Mail: julian.kauffeld@gmx.de</p>
     <h3 style={{ color: "#c9a84c", margin: "20px 0 8px" }}>2. Erhobene Daten</h3>
-    <p>Wir erheben folgende Daten: E-Mail-Adresse bei Registrierung, Chat-Nachrichten zur KI-Verarbeitung, Zahlungsdaten über Stripe (werden nicht bei uns gespeichert).</p>
-    <h3 style={{ color: "#c9a84c", margin: "20px 0 8px" }}>3. Zweck der Datenverarbeitung</h3>
-    <p>Ihre Daten werden ausschließlich zur Bereitstellung des Dienstes verwendet. Chat-Nachrichten werden an die Anthropic API zur KI-Verarbeitung weitergeleitet und in unserer Datenbank gespeichert.</p>
-    <h3 style={{ color: "#c9a84c", margin: "20px 0 8px" }}>4. Drittanbieter</h3>
-    <p>Wir nutzen folgende Drittanbieter: Supabase (Datenspeicherung, EU/Irland), Anthropic (KI-Verarbeitung, USA), Stripe (Zahlungsabwicklung), Vercel (Hosting, USA). Mit US-Anbietern bestehen Standardvertragsklauseln gemäß DSGVO.</p>
-    <h3 style={{ color: "#c9a84c", margin: "20px 0 8px" }}>5. Ihre Rechte</h3>
-    <p>Sie haben das Recht auf Auskunft, Berichtigung, Löschung und Datenübertragbarkeit. Kontakt: julian.kauffeld@gmx.de</p>
-    <h3 style={{ color: "#c9a84c", margin: "20px 0 8px" }}>6. Cookies</h3>
-    <p>Wir verwenden technisch notwendige Cookies für die Anmeldung (Session-Cookie). Es werden keine Tracking- oder Marketing-Cookies verwendet.</p>
-    <h3 style={{ color: "#c9a84c", margin: "20px 0 8px" }}>7. Datenlöschung</h3>
-    <p>Ihr Account und alle gespeicherten Daten können jederzeit auf Anfrage gelöscht werden. Kontakt: julian.kauffeld@gmx.de</p>
+    <p>E-Mail-Adresse bei Registrierung, Chat-Nachrichten zur KI-Verarbeitung, Zahlungsdaten über Stripe.</p>
+    <h3 style={{ color: "#c9a84c", margin: "20px 0 8px" }}>3. Drittanbieter</h3>
+    <p>Supabase (EU/Irland), Anthropic (USA), Stripe, Vercel (USA).</p>
+    <h3 style={{ color: "#c9a84c", margin: "20px 0 8px" }}>4. Ihre Rechte</h3>
+    <p>Auskunft, Berichtigung und Löschung: julian.kauffeld@gmx.de</p>
+    <h3 style={{ color: "#c9a84c", margin: "20px 0 8px" }}>5. Cookies</h3>
+    <p>Nur technisch notwendige Session-Cookies. Keine Tracking-Cookies.</p>
   </div>
 );
 
@@ -152,38 +140,34 @@ const LegalEN = ({ page }) => (
     {page === "impressum" && <>
       <h2 style={{ color: "#f0d080", letterSpacing: "2px", marginBottom: "24px" }}>IMPRINT</h2>
       <h3 style={{ color: "#c9a84c", marginBottom: "8px" }}>Service Provider</h3>
-      <p>Julian Kauffeld<br />Menteweg 3<br />31675 Bückeburg<br />Germany</p>
-      <h3 style={{ color: "#c9a84c", margin: "20px 0 8px" }}>Contact</h3>
-      <p>Email: julian.kauffeld@gmx.de</p>
+      <p>Julian Kauffeld<br />Menteweg 3<br />31675 Bückeburg<br />Germany<br />Email: julian.kauffeld@gmx.de</p>
       <h3 style={{ color: "#c9a84c", margin: "20px 0 8px" }}>Disclaimer</h3>
-      <p>Mr. Investor is an AI-powered finance assistant and does not replace professional financial advice. All content is for informational purposes only.</p>
+      <p>Mr. Investor is an AI finance assistant and does not replace professional financial advice.</p>
     </>}
     {page === "agb" && <>
       <h2 style={{ color: "#f0d080", letterSpacing: "2px", marginBottom: "24px" }}>TERMS OF SERVICE</h2>
       <h3 style={{ color: "#c9a84c", marginBottom: "8px" }}>1. Service</h3>
-      <p>Mr. Investor (mr-investor.com) is operated by Julian Kauffeld. The free version includes 3 questions. Premium (€9.99/month) offers unlimited use.</p>
+      <p>Mr. Investor (mr-investor.com) is operated by Julian Kauffeld. Free version: 5 questions daily. Premium: €9.99/month unlimited.</p>
       <h3 style={{ color: "#c9a84c", margin: "20px 0 8px" }}>2. No Financial Advice</h3>
-      <p>Mr. Investor is not a licensed financial advisor. All content is for informational purposes only. Users make financial decisions at their own risk.</p>
-      <h3 style={{ color: "#c9a84c", margin: "20px 0 8px" }}>3. Subscription & Cancellation</h3>
-      <p>Premium renews monthly. Cancel anytime via the customer portal or by emailing julian.kauffeld@gmx.de. Cancellation takes effect at the end of the paid period.</p>
-      <h3 style={{ color: "#c9a84c", margin: "20px 0 8px" }}>4. Liability</h3>
-      <p>No liability for financial losses based on use of Mr. Investor. Service provided without guarantee of availability.</p>
+      <p>Not a licensed financial advisor. All content for informational purposes only.</p>
+      <h3 style={{ color: "#c9a84c", margin: "20px 0 8px" }}>3. Cancellation</h3>
+      <p>Cancel anytime via customer portal or email: julian.kauffeld@gmx.de</p>
     </>}
     {page === "datenschutz" && <>
       <h2 style={{ color: "#f0d080", letterSpacing: "2px", marginBottom: "24px" }}>PRIVACY POLICY</h2>
       <h3 style={{ color: "#c9a84c", marginBottom: "8px" }}>Controller</h3>
-      <p>Julian Kauffeld, Menteweg 3, 31675 Bückeburg, Germany<br />Email: julian.kauffeld@gmx.de</p>
+      <p>Julian Kauffeld, Menteweg 3, 31675 Bückeburg<br />Email: julian.kauffeld@gmx.de</p>
       <h3 style={{ color: "#c9a84c", margin: "20px 0 8px" }}>Data Collected</h3>
-      <p>Email address (registration), chat messages (AI processing), payment data via Stripe (not stored by us).</p>
+      <p>Email, chat messages, payment data via Stripe.</p>
       <h3 style={{ color: "#c9a84c", margin: "20px 0 8px" }}>Third Parties</h3>
-      <p>Supabase (EU/Ireland), Anthropic (USA), Stripe, Vercel (USA). Standard contractual clauses apply for US providers.</p>
+      <p>Supabase (EU), Anthropic (USA), Stripe, Vercel (USA).</p>
       <h3 style={{ color: "#c9a84c", margin: "20px 0 8px" }}>Your Rights</h3>
-      <p>You have the right to access, correct, delete, and transfer your data. Contact: julian.kauffeld@gmx.de</p>
-      <h3 style={{ color: "#c9a84c", margin: "20px 0 8px" }}>Cookies</h3>
-      <p>Only technically necessary session cookies. No tracking or marketing cookies.</p>
+      <p>Access, correction, deletion: julian.kauffeld@gmx.de</p>
     </>}
   </div>
 );
+
+const getTodayKey = () => new Date().toISOString().split('T')[0];
 
 export default function MrInvestor() {
   const detectLang = () => {
@@ -193,11 +177,18 @@ export default function MrInvestor() {
     return browser.startsWith('de') ? 'de' : 'en';
   };
 
+  const getDailyQuestions = () => {
+    const today = getTodayKey();
+    const stored = JSON.parse(localStorage.getItem('daily') || '{}');
+    if (stored.date === today) return Math.max(0, FREE_LIMIT - (stored.used || 0));
+    return FREE_LIMIT;
+  };
+
   const [lang, setLang] = useState(detectLang);
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
-  const [freeQuestions, setFreeQuestions] = useState(FREE_LIMIT);
+  const [freeQuestions, setFreeQuestions] = useState(getDailyQuestions);
   const [isPremium, setIsPremium] = useState(false);
   const [showUpgrade, setShowUpgrade] = useState(false);
   const [showWelcome, setShowWelcome] = useState(true);
@@ -227,7 +218,7 @@ export default function MrInvestor() {
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
       setUser(session?.user ?? null);
       if (session?.user) { checkPremium(session.user.id); loadMessages(session.user.id); }
-      else { setMessages([]); setShowWelcome(true); setIsPremium(false); setFreeQuestions(FREE_LIMIT); }
+      else { setMessages([]); setShowWelcome(true); setIsPremium(false); setFreeQuestions(getDailyQuestions()); }
     });
     return () => subscription.unsubscribe();
   }, []);
@@ -245,7 +236,8 @@ export default function MrInvestor() {
     const { data } = await supabase.from("profiles").select("is_premium, free_questions_used").eq("id", userId).single();
     if (data) {
       setIsPremium(data.is_premium || false);
-      setFreeQuestions(data.is_premium ? 999 : Math.max(0, FREE_LIMIT - (data.free_questions_used || 0)));
+      if (!data.is_premium) setFreeQuestions(getDailyQuestions());
+      else setFreeQuestions(999);
     }
   };
 
@@ -272,6 +264,14 @@ export default function MrInvestor() {
     setMessages([]); setShowWelcome(true);
   };
 
+  const incrementDailyUsage = () => {
+    const today = getTodayKey();
+    const stored = JSON.parse(localStorage.getItem('daily') || '{}');
+    const used = stored.date === today ? (stored.used || 0) + 1 : 1;
+    localStorage.setItem('daily', JSON.stringify({ date: today, used }));
+    setFreeQuestions(Math.max(0, FREE_LIMIT - used));
+  };
+
   const sendMessage = async (text) => {
     const userText = text || input.trim();
     if (!userText || !user) return;
@@ -279,11 +279,13 @@ export default function MrInvestor() {
     setShowWelcome(false); setInput(""); setLoading(true);
     const newMessages = [...messages, { role: "user", content: userText }];
     setMessages(newMessages);
-    saveMessage(user.id, "user", userText);
+    if (user) saveMessage(user.id, "user", userText);
     if (!isPremium) {
-      setFreeQuestions((q) => q - 1);
-      const { data: profile } = await supabase.from("profiles").select("free_questions_used").eq("id", user.id).single();
-      await supabase.from("profiles").upsert({ id: user.id, free_questions_used: (profile?.free_questions_used || 0) + 1 });
+      incrementDailyUsage();
+      if (user) {
+        const { data: profile } = await supabase.from("profiles").select("free_questions_used").eq("id", user.id).single();
+        await supabase.from("profiles").upsert({ id: user.id, free_questions_used: (profile?.free_questions_used || 0) + 1 });
+      }
     }
     try {
       const response = await fetch("/api/chat", {
@@ -293,7 +295,7 @@ export default function MrInvestor() {
       const data = await response.json();
       const reply = data.content?.[0]?.text || "Error.";
       setMessages([...newMessages, { role: "assistant", content: reply }]);
-      saveMessage(user.id, "assistant", reply);
+      if (user) saveMessage(user.id, "assistant", reply);
     } catch { setMessages([...newMessages, { role: "assistant", content: "Connection error." }]); }
     setLoading(false);
   };
@@ -317,9 +319,7 @@ export default function MrInvestor() {
             {page === "agb" && <AGBDE />}
             {page === "datenschutz" && <DatenschutzDE />}
           </>
-        ) : (
-          <LegalEN page={page} />
-        )}
+        ) : <LegalEN page={page} />}
       </div>
     </div>
   ) : null;
