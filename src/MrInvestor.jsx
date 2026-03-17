@@ -312,5 +312,4 @@ export default function MrInvestor() {
     </div>
   );
 }
-
-          
+            
