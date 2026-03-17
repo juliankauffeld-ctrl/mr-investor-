@@ -19,6 +19,7 @@ Du bist kein lizenzierter Finanzberater - weise bei komplexen Fragen darauf hin 
 
 const FREE_LIMIT = 3;
 const STRIPE_LINK = "https://buy.stripe.com/cNi6oAaZt7YK6Br6pr38401";
+const STRIPE_PORTAL = "https://billing.stripe.com/p/login/9B67sEebF2Eq9NDcNP38400";
 
 const suggestedQuestions = [
   "Wie fange ich mit ETF Investing an?",
@@ -228,7 +229,7 @@ export default function MrInvestor() {
         </div>
         <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
           {!isPremium && <div style={{ fontSize: "12px", color: freeQuestions <= 1 ? "#e07050" : "#888", background: "#1a1a25", padding: "4px 10px", borderRadius: "20px", border: `1px solid ${freeQuestions <= 1 ? "#e07050" : "#2a2a3a"}` }}>{freeQuestions} / {FREE_LIMIT} gratis</div>}
-          {isPremium && <div style={{ fontSize: "12px", color: "#c9a84c", background: "rgba(201,168,76,0.1)", padding: "4px 12px", borderRadius: "20px", border: "1px solid #c9a84c" }}>✦ PREMIUM</div>}
+          {isPremium && <div style={{ display: "flex", alignItems: "center", gap: "8px" }}><div style={{ fontSize: "12px", color: "#c9a84c", background: "rgba(201,168,76,0.1)", padding: "4px 12px", borderRadius: "20px", border: "1px solid #c9a84c" }}>✦ PREMIUM</div><button onClick={() => window.open(STRIPE_PORTAL, '_blank')} style={{ fontSize: "11px", color: "#666", background: "transparent", border: "1px solid #2a2a3a", padding: "4px 10px", borderRadius: "20px", cursor: "pointer" }}>Abo verwalten</button></div>}
           {messages.length > 0 && <button onClick={clearHistory} style={{ background: "transparent", color: "#555", border: "1px solid #2a2a3a", padding: "6px 12px", borderRadius: "20px", cursor: "pointer", fontSize: "11px" }}>Verlauf löschen</button>}
           {!isPremium && <button onClick={() => setShowUpgrade(true)} style={{ background: gold, color: "#0a0a0f", border: "none", padding: "6px 14px", borderRadius: "20px", cursor: "pointer", fontSize: "12px", fontWeight: "bold" }}>UPGRADE</button>}
           <button onClick={handleLogout} style={{ background: "transparent", color: "#666", border: "1px solid #2a2a3a", padding: "6px 12px", borderRadius: "20px", cursor: "pointer", fontSize: "12px" }}>Logout</button>
@@ -312,4 +313,3 @@ export default function MrInvestor() {
     </div>
   );
 }
-            
