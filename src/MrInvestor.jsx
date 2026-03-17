@@ -45,6 +45,7 @@ export default function MrInvestor() {
   const [password, setPassword] = useState("");
   const [authLoading, setAuthLoading] = useState(false);
   const [authError, setAuthError] = useState("");
+  const [page, setPage] = useState("home");
   const messagesEndRef = useRef(null);
 
   useEffect(() => {
@@ -134,6 +135,63 @@ export default function MrInvestor() {
 
   const gold = "linear-gradient(135deg, #c9a84c, #f0d080)";
 
+  if (page === "impressum") return (
+    <div style={{ minHeight: "100vh", background: "#0a0a0f", color: "#e8e0d0", fontFamily: "Georgia, serif" }}>
+      <div style={{ padding: "16px 24px", borderBottom: "1px solid #2a2a3a" }}>
+        <button onClick={() => setPage("home")} style={{ background: "transparent", border: "none", color: "#c9a84c", cursor: "pointer", fontSize: "14px" }}>← Zurück</button>
+      </div>
+      <div style={{ maxWidth: "720px", margin: "0 auto", padding: "40px 24px", lineHeight: "1.8" }}>
+        <h1 style={{ color: "#f0d080", letterSpacing: "2px", marginBottom: "32px" }}>IMPRESSUM</h1>
+        <h2 style={{ color: "#c9a84c" }}>Angaben gemäß § 5 TMG</h2>
+        <p>Julian Kauffeld<br />Menteweg 3<br />31675 Bückeburg<br />Deutschland</p>
+        <h2 style={{ color: "#c9a84c", marginTop: "24px" }}>Kontakt</h2>
+        <p>E-Mail: julian.kauffeld@gmx.de</p>
+        <h2 style={{ color: "#c9a84c", marginTop: "24px" }}>Haftungsausschluss</h2>
+        <p>Mr. Investor ist ein KI-gestützter Finanzassistent und ersetzt keine professionelle Finanzberatung.</p>
+      </div>
+    </div>
+  );
+
+  if (page === "agb") return (
+    <div style={{ minHeight: "100vh", background: "#0a0a0f", color: "#e8e0d0", fontFamily: "Georgia, serif" }}>
+      <div style={{ padding: "16px 24px", borderBottom: "1px solid #2a2a3a" }}>
+        <button onClick={() => setPage("home")} style={{ background: "transparent", border: "none", color: "#c9a84c", cursor: "pointer", fontSize: "14px" }}>← Zurück</button>
+      </div>
+      <div style={{ maxWidth: "720px", margin: "0 auto", padding: "40px 24px", lineHeight: "1.8" }}>
+        <h1 style={{ color: "#f0d080", letterSpacing: "2px", marginBottom: "32px" }}>AGB</h1>
+        <h2 style={{ color: "#c9a84c" }}>§ 1 Geltungsbereich</h2>
+        <p>Diese AGB gelten für die Nutzung von Mr. Investor, betrieben von Julian Kauffeld.</p>
+        <h2 style={{ color: "#c9a84c", marginTop: "24px" }}>§ 2 Leistungsbeschreibung</h2>
+        <p>Mr. Investor bietet einen KI-gestützten Finanzassistenten. Das Premium-Abonnement (9,99€/Monat) bietet unbegrenzte Nutzung.</p>
+        <h2 style={{ color: "#c9a84c", marginTop: "24px" }}>§ 3 Kein Finanzrat</h2>
+        <p>Mr. Investor ist kein lizenzierter Finanzberater. Alle Inhalte dienen nur zu Informationszwecken.</p>
+        <h2 style={{ color: "#c9a84c", marginTop: "24px" }}>§ 4 Kündigung</h2>
+        <p>Das Abonnement verlängert sich monatlich. Kündigung jederzeit möglich per E-Mail an julian.kauffeld@gmx.de</p>
+        <h2 style={{ color: "#c9a84c", marginTop: "24px" }}>§ 5 Widerrufsrecht</h2>
+        <p>14 Tage Widerrufsrecht. Kontakt: julian.kauffeld@gmx.de</p>
+      </div>
+    </div>
+  );
+
+  if (page === "datenschutz") return (
+    <div style={{ minHeight: "100vh", background: "#0a0a0f", color: "#e8e0d0", fontFamily: "Georgia, serif" }}>
+      <div style={{ padding: "16px 24px", borderBottom: "1px solid #2a2a3a" }}>
+        <button onClick={() => setPage("home")} style={{ background: "transparent", border: "none", color: "#c9a84c", cursor: "pointer", fontSize: "14px" }}>← Zurück</button>
+      </div>
+      <div style={{ maxWidth: "720px", margin: "0 auto", padding: "40px 24px", lineHeight: "1.8" }}>
+        <h1 style={{ color: "#f0d080", letterSpacing: "2px", marginBottom: "32px" }}>DATENSCHUTZ</h1>
+        <h2 style={{ color: "#c9a84c" }}>1. Verantwortlicher</h2>
+        <p>Julian Kauffeld, Menteweg 3, 31675 Bückeburg<br />E-Mail: julian.kauffeld@gmx.de</p>
+        <h2 style={{ color: "#c9a84c", marginTop: "24px" }}>2. Erhobene Daten</h2>
+        <p>E-Mail bei Registrierung, Chat-Nachrichten zur KI-Verarbeitung, Zahlungsdaten über Stripe.</p>
+        <h2 style={{ color: "#c9a84c", marginTop: "24px" }}>3. Drittanbieter</h2>
+        <p>Supabase (EU), Anthropic (USA), Stripe, Vercel (USA).</p>
+        <h2 style={{ color: "#c9a84c", marginTop: "24px" }}>4. Ihre Rechte</h2>
+        <p>Auskunft, Berichtigung und Löschung: julian.kauffeld@gmx.de</p>
+      </div>
+    </div>
+  );
+
   return (
     <div style={{ minHeight: "100vh", background: "#0a0a0f", fontFamily: "'Georgia', serif", color: "#e8e0d0", display: "flex", flexDirection: "column" }}>
       <div style={{ borderBottom: "1px solid #2a2a3a", padding: "16px 24px", display: "flex", alignItems: "center", justifyContent: "space-between", background: "linear-gradient(180deg, #12121a 0%, #0a0a0f 100%)" }}>
@@ -194,7 +252,12 @@ export default function MrInvestor() {
             <button onClick={() => sendMessage()} style={{ background: gold, color: "#0a0a0f", border: "none", borderRadius: "50%", width: "46px", height: "46px", cursor: "pointer", fontSize: "18px" }}>→</button>
           </div>
         )}
-        <div style={{ textAlign: "center", fontSize: "11px", color: "#444", marginTop: "8px" }}>Kein lizenzierter Finanzberater. Nur zu Informationszwecken.</div>
+        <div style={{ textAlign: "center", fontSize: "11px", color: "#444", marginTop: "8px" }}>
+          Kein lizenzierter Finanzberater. &nbsp;|&nbsp;
+          <span onClick={() => setPage("impressum")} style={{ cursor: "pointer", color: "#666" }}>Impressum</span> &nbsp;|&nbsp;
+          <span onClick={() => setPage("agb")} style={{ cursor: "pointer", color: "#666" }}>AGB</span> &nbsp;|&nbsp;
+          <span onClick={() => setPage("datenschutz")} style={{ cursor: "pointer", color: "#666" }}>Datenschutz</span>
+        </div>
       </div>
 
       {showAuth && (
