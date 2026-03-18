@@ -22,7 +22,7 @@ const translations = {
     upgrade: "UPGRADE",
     premium: "✦ PREMIUM",
     manageAbo: "Abo verwalten",
-    deleteHistory: "Verlauf löschen",
+    deleteHistory: "Chat löschen",
     freeOf: "heute",
     limitReached: "Tageslimit erreicht. Morgen wieder 5 Fragen gratis!",
     upgradeNow: "JETZT UPGRADEN – 9,99€/Monat",
@@ -41,14 +41,25 @@ const translations = {
     hasAccount: "Schon ein Konto? Einloggen",
     premiumTitle: "MR. INVESTOR PREMIUM",
     feature1: "✦ Unbegrenzte Fragen",
-    feature2: "✦ Chat-Verlauf gespeichert",
+    feature2: "✦ Mehrere Chats gespeichert",
     feature3: "✦ Persönliche Investmentpläne",
     feature4: "✦ Prioritäts-Support",
     perMonth: "pro Monat",
     close: "Schließen",
     back: "← Zurück",
+    newChat: "Neuer Chat",
+    chats: "Chats",
     suggested: ["Wie fange ich mit ETF Investing an?", "Was ist der S&P 500?", "Wie spare ich 10.000€ in 2 Jahren?", "Trade Republic oder andere Broker?"],
-    system: `Du bist Mr. Investor, ein freundlicher aber direkter KI-Finanzassistent für Deutsche. Du hilfst bei Finanzplanung, ETFs, S&P 500, Sparstrategien und Investmentzielen. Antworte immer auf Deutsch. Sei präzise und motivierend. Maximal 200 Wörter. Du bist kein lizenzierter Finanzberater.`,
+    system: `Du bist Mr. Investor, ein freundlicher, empathischer und direkter KI-Finanzassistent für Deutsche. Du hilfst bei Finanzplanung, ETFs, S&P 500, Sparstrategien und Investmentzielen.
+
+Wichtige Verhaltensregeln:
+- Antworte immer auf Deutsch
+- Sei präzise, motivierend und warm
+- Frage am Ende deiner Antwort nach ob alles verständlich war oder ob du etwas genauer erklären sollst
+- Wenn jemand unsicher wirkt, sei besonders geduldig und ermutigend
+- Nutze einfache Sprache und erkläre Fachbegriffe
+- Maximal 200 Wörter pro Antwort
+- Du bist kein lizenzierter Finanzberater – weise bei komplexen Fragen darauf hin`,
   },
   en: {
     title: "MR. INVESTOR",
@@ -61,7 +72,7 @@ const translations = {
     upgrade: "UPGRADE",
     premium: "✦ PREMIUM",
     manageAbo: "Manage subscription",
-    deleteHistory: "Clear history",
+    deleteHistory: "Delete chat",
     freeOf: "today",
     limitReached: "Daily limit reached. Come back tomorrow for 5 more free questions!",
     upgradeNow: "UPGRADE NOW – €9.99/month",
@@ -80,14 +91,25 @@ const translations = {
     hasAccount: "Already have an account? Login",
     premiumTitle: "MR. INVESTOR PREMIUM",
     feature1: "✦ Unlimited questions",
-    feature2: "✦ Chat history saved",
+    feature2: "✦ Multiple chats saved",
     feature3: "✦ Personal investment plans",
     feature4: "✦ Priority support",
     perMonth: "per month",
     close: "Close",
     back: "← Back",
+    newChat: "New Chat",
+    chats: "Chats",
     suggested: ["How do I start investing in ETFs?", "What is the S&P 500?", "How do I save €10,000 in 2 years?", "Best brokers for beginners?"],
-    system: `You are Mr. Investor, a friendly but direct AI finance assistant. You help with financial planning, ETFs, S&P 500, saving strategies and investment goals. Always respond in English. Be precise and motivating. Maximum 200 words. You are not a licensed financial advisor.`,
+    system: `You are Mr. Investor, a friendly, empathetic and direct AI finance assistant. You help with financial planning, ETFs, S&P 500, saving strategies and investment goals.
+
+Important behavior rules:
+- Always respond in English
+- Be precise, motivating and warm
+- At the end of your answer, ask if everything was clear or if you should explain something in more detail
+- If someone seems unsure, be especially patient and encouraging
+- Use simple language and explain technical terms
+- Maximum 200 words per answer
+- You are not a licensed financial advisor – mention this for complex questions`,
   }
 };
 
@@ -99,7 +121,7 @@ const ImpressumDE = () => (
     <h3 style={{ color: "#c9a84c", margin: "20px 0 8px" }}>Kontakt</h3>
     <p>E-Mail: julian.kauffeld@gmx.de</p>
     <h3 style={{ color: "#c9a84c", margin: "20px 0 8px" }}>Haftungsausschluss</h3>
-    <p>Mr. Investor ist ein KI-gestützter Finanzassistent und ersetzt keine professionelle Finanzberatung. Alle Inhalte dienen nur zu Informationszwecken.</p>
+    <p>Mr. Investor ist ein KI-gestützter Finanzassistent und ersetzt keine professionelle Finanzberatung. Alle Inhalte dienen nur zu Informationszwecken und stellen keine Anlageberatung dar.</p>
   </div>
 );
 
@@ -109,11 +131,11 @@ const AGBDE = () => (
     <h3 style={{ color: "#c9a84c", marginBottom: "8px" }}>§ 1 Geltungsbereich</h3>
     <p>Diese AGB gelten für die Nutzung von Mr. Investor (mr-investor.com), betrieben von Julian Kauffeld.</p>
     <h3 style={{ color: "#c9a84c", margin: "20px 0 8px" }}>§ 2 Leistungsbeschreibung</h3>
-    <p>Mr. Investor bietet einen KI-gestützten Finanzassistenten. Die kostenlose Version umfasst 5 Fragen täglich. Das Premium-Abonnement (9,99€/Monat) bietet unbegrenzte Nutzung.</p>
+    <p>Mr. Investor bietet einen KI-gestützten Finanzassistenten. Die kostenlose Version umfasst 5 Fragen täglich. Das Premium-Abonnement (9,99€/Monat) bietet unbegrenzte Nutzung und mehrere Chats.</p>
     <h3 style={{ color: "#c9a84c", margin: "20px 0 8px" }}>§ 3 Kein Finanzrat</h3>
     <p>Mr. Investor ist kein lizenzierter Finanzberater. Alle Inhalte dienen nur zu Informationszwecken.</p>
     <h3 style={{ color: "#c9a84c", margin: "20px 0 8px" }}>§ 4 Kündigung</h3>
-    <p>Das Abonnement verlängert sich monatlich. Kündigung jederzeit möglich per E-Mail an julian.kauffeld@gmx.de</p>
+    <p>Das Abonnement verlängert sich monatlich. Kündigung jederzeit per E-Mail an julian.kauffeld@gmx.de</p>
     <h3 style={{ color: "#c9a84c", margin: "20px 0 8px" }}>§ 5 Widerrufsrecht</h3>
     <p>14 Tage Widerrufsrecht. Kontakt: julian.kauffeld@gmx.de</p>
   </div>
@@ -139,30 +161,17 @@ const LegalEN = ({ page }) => (
   <div style={{ color: "#e8e0d0", lineHeight: "1.8" }}>
     {page === "impressum" && <>
       <h2 style={{ color: "#f0d080", letterSpacing: "2px", marginBottom: "24px" }}>IMPRINT</h2>
-      <h3 style={{ color: "#c9a84c", marginBottom: "8px" }}>Service Provider</h3>
-      <p>Julian Kauffeld<br />Menteweg 3<br />31675 Bückeburg<br />Germany<br />Email: julian.kauffeld@gmx.de</p>
+      <p>Julian Kauffeld<br />Menteweg 3, 31675 Bückeburg, Germany<br />Email: julian.kauffeld@gmx.de</p>
       <h3 style={{ color: "#c9a84c", margin: "20px 0 8px" }}>Disclaimer</h3>
-      <p>Mr. Investor is an AI finance assistant and does not replace professional financial advice.</p>
+      <p>Not a licensed financial advisor. All content for informational purposes only.</p>
     </>}
     {page === "agb" && <>
       <h2 style={{ color: "#f0d080", letterSpacing: "2px", marginBottom: "24px" }}>TERMS OF SERVICE</h2>
-      <h3 style={{ color: "#c9a84c", marginBottom: "8px" }}>1. Service</h3>
-      <p>Mr. Investor (mr-investor.com) is operated by Julian Kauffeld. Free version: 5 questions daily. Premium: €9.99/month unlimited.</p>
-      <h3 style={{ color: "#c9a84c", margin: "20px 0 8px" }}>2. No Financial Advice</h3>
-      <p>Not a licensed financial advisor. All content for informational purposes only.</p>
-      <h3 style={{ color: "#c9a84c", margin: "20px 0 8px" }}>3. Cancellation</h3>
-      <p>Cancel anytime via customer portal or email: julian.kauffeld@gmx.de</p>
+      <p>Operator: Julian Kauffeld. Free: 5 questions daily. Premium: €9.99/month unlimited. Not a licensed financial advisor. Cancel anytime: julian.kauffeld@gmx.de. 14-day withdrawal right.</p>
     </>}
     {page === "datenschutz" && <>
       <h2 style={{ color: "#f0d080", letterSpacing: "2px", marginBottom: "24px" }}>PRIVACY POLICY</h2>
-      <h3 style={{ color: "#c9a84c", marginBottom: "8px" }}>Controller</h3>
-      <p>Julian Kauffeld, Menteweg 3, 31675 Bückeburg<br />Email: julian.kauffeld@gmx.de</p>
-      <h3 style={{ color: "#c9a84c", margin: "20px 0 8px" }}>Data Collected</h3>
-      <p>Email, chat messages, payment data via Stripe.</p>
-      <h3 style={{ color: "#c9a84c", margin: "20px 0 8px" }}>Third Parties</h3>
-      <p>Supabase (EU), Anthropic (USA), Stripe, Vercel (USA).</p>
-      <h3 style={{ color: "#c9a84c", margin: "20px 0 8px" }}>Your Rights</h3>
-      <p>Access, correction, deletion: julian.kauffeld@gmx.de</p>
+      <p>Controller: Julian Kauffeld, julian.kauffeld@gmx.de<br />Data: Email, chat messages, payment via Stripe.<br />Third parties: Supabase (EU), Anthropic, Stripe, Vercel.</p>
     </>}
   </div>
 );
@@ -200,6 +209,9 @@ export default function MrInvestor() {
   const [authLoading, setAuthLoading] = useState(false);
   const [authError, setAuthError] = useState("");
   const [page, setPage] = useState("home");
+  const [chats, setChats] = useState([]);
+  const [currentChatId, setCurrentChatId] = useState(null);
+  const [showSidebar, setShowSidebar] = useState(false);
   const messagesEndRef = useRef(null);
   const t = translations[lang];
 
@@ -213,31 +225,68 @@ export default function MrInvestor() {
     supabase.auth.getSession().then(({ data: { session } }) => {
       setUser(session?.user ?? null);
       setAuthChecked(true);
-      if (session?.user) { checkPremium(session.user.id); loadMessages(session.user.id); }
+      if (session?.user) { checkPremium(session.user.id); }
     });
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
       setUser(session?.user ?? null);
-      if (session?.user) { checkPremium(session.user.id); loadMessages(session.user.id); }
-      else { setMessages([]); setShowWelcome(true); setIsPremium(false); setFreeQuestions(getDailyQuestions()); }
+      if (session?.user) { checkPremium(session.user.id); }
+      else { setMessages([]); setChats([]); setCurrentChatId(null); setShowWelcome(true); setIsPremium(false); setFreeQuestions(getDailyQuestions()); }
     });
     return () => subscription.unsubscribe();
   }, []);
 
-  const loadMessages = async (userId) => {
-    const { data } = await supabase.from("messages").select("role, content").eq("user_id", userId).order("created_at", { ascending: true }).limit(50);
-    if (data && data.length > 0) { setMessages(data); setShowWelcome(false); }
+  const loadChats = async (userId, premium) => {
+    if (!premium) return;
+    const { data } = await supabase.from("chats").select("*").eq("user_id", userId).order("created_at", { ascending: false });
+    if (data && data.length > 0) {
+      setChats(data);
+      loadChatMessages(data[0].id);
+      setCurrentChatId(data[0].id);
+    }
   };
 
-  const saveMessage = async (userId, role, content) => {
-    await supabase.from("messages").insert({ user_id: userId, role, content });
+  const loadChatMessages = async (chatId) => {
+    const { data } = await supabase.from("messages").select("role, content").eq("chat_id", chatId).order("created_at", { ascending: true }).limit(50);
+    if (data && data.length > 0) { setMessages(data); setShowWelcome(false); }
+    else { setMessages([]); setShowWelcome(true); }
+  };
+
+  const createNewChat = async () => {
+    if (!user) return;
+    const { data } = await supabase.from("chats").insert({ user_id: user.id, title: t.newChat }).select().single();
+    if (data) {
+      setChats(prev => [data, ...prev]);
+      setCurrentChatId(data.id);
+      setMessages([]);
+      setShowWelcome(true);
+      setShowSidebar(false);
+    }
+  };
+
+  const switchChat = (chatId) => {
+    setCurrentChatId(chatId);
+    loadChatMessages(chatId);
+    setShowSidebar(false);
+  };
+
+  const deleteChat = async (chatId, e) => {
+    e.stopPropagation();
+    await supabase.from("chats").delete().eq("id", chatId);
+    const remaining = chats.filter(c => c.id !== chatId);
+    setChats(remaining);
+    if (currentChatId === chatId) {
+      if (remaining.length > 0) { setCurrentChatId(remaining[0].id); loadChatMessages(remaining[0].id); }
+      else { setCurrentChatId(null); setMessages([]); setShowWelcome(true); }
+    }
   };
 
   const checkPremium = async (userId) => {
     const { data } = await supabase.from("profiles").select("is_premium, free_questions_used").eq("id", userId).single();
     if (data) {
-      setIsPremium(data.is_premium || false);
-      if (!data.is_premium) setFreeQuestions(getDailyQuestions());
-      else setFreeQuestions(999);
+      const premium = data.is_premium || false;
+      setIsPremium(premium);
+      if (!premium) setFreeQuestions(getDailyQuestions());
+      else { setFreeQuestions(999); loadChats(userId, true); }
     }
   };
 
@@ -258,12 +307,6 @@ export default function MrInvestor() {
 
   const handleLogout = async () => { await supabase.auth.signOut(); };
 
-  const clearHistory = async () => {
-    if (!user) return;
-    await supabase.from("messages").delete().eq("user_id", user.id);
-    setMessages([]); setShowWelcome(true);
-  };
-
   const incrementDailyUsage = () => {
     const today = getTodayKey();
     const stored = JSON.parse(localStorage.getItem('daily') || '{}');
@@ -273,20 +316,33 @@ export default function MrInvestor() {
   };
 
   const sendMessage = async (text) => {
+    // Only save messages for premium users
     const userText = text || input.trim();
     if (!userText || !user) return;
     if (!isPremium && freeQuestions <= 0) { setShowUpgrade(true); return; }
+
+    let chatId = currentChatId;
+    if (isPremium) {
+      if (!chatId) {
+        const { data } = await supabase.from("chats").insert({ user_id: user.id, title: userText.slice(0, 30) }).select().single();
+        if (data) { chatId = data.id; setCurrentChatId(data.id); setChats(prev => [data, ...prev]); }
+      } else if (messages.length === 0) {
+        await supabase.from("chats").update({ title: userText.slice(0, 30) }).eq("id", chatId);
+        setChats(prev => prev.map(c => c.id === chatId ? { ...c, title: userText.slice(0, 30) } : c));
+      }
+    }
+
     setShowWelcome(false); setInput(""); setLoading(true);
     const newMessages = [...messages, { role: "user", content: userText }];
     setMessages(newMessages);
-    if (user) saveMessage(user.id, "user", userText);
+    if (isPremium && chatId) await supabase.from("messages").insert({ user_id: user.id, chat_id: chatId, role: "user", content: userText });
+
     if (!isPremium) {
       incrementDailyUsage();
-      if (user) {
-        const { data: profile } = await supabase.from("profiles").select("free_questions_used").eq("id", user.id).single();
-        await supabase.from("profiles").upsert({ id: user.id, free_questions_used: (profile?.free_questions_used || 0) + 1 });
-      }
+      const { data: profile } = await supabase.from("profiles").select("free_questions_used").eq("id", user.id).single();
+      await supabase.from("profiles").upsert({ id: user.id, free_questions_used: (profile?.free_questions_used || 0) + 1 });
     }
+
     try {
       const response = await fetch("/api/chat", {
         method: "POST", headers: { "Content-Type": "application/json" },
@@ -295,7 +351,7 @@ export default function MrInvestor() {
       const data = await response.json();
       const reply = data.content?.[0]?.text || "Error.";
       setMessages([...newMessages, { role: "assistant", content: reply }]);
-      if (user) saveMessage(user.id, "assistant", reply);
+      if (isPremium && chatId) await supabase.from("messages").insert({ user_id: user.id, chat_id: chatId, role: "assistant", content: reply });
     } catch { setMessages([...newMessages, { role: "assistant", content: "Connection error." }]); }
     setLoading(false);
   };
@@ -310,15 +366,11 @@ export default function MrInvestor() {
   );
 
   const LegalModal = () => page !== "home" ? (
-    <div style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.9)", display: "flex", alignItems: "center", justifyContent: "center", zIndex: 100, padding: "20px", overflowY: "auto" }} onClick={() => setPage("home")}>
+    <div style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.9)", display: "flex", alignItems: "center", justifyContent: "center", zIndex: 200, padding: "20px" }} onClick={() => setPage("home")}>
       <div style={{ background: "#12121a", border: "1px solid #2a2a3a", borderRadius: "16px", padding: "32px", maxWidth: "650px", width: "100%", maxHeight: "85vh", overflowY: "auto" }} onClick={e => e.stopPropagation()}>
         <button onClick={() => setPage("home")} style={{ background: "transparent", border: "none", color: "#c9a84c", cursor: "pointer", marginBottom: "20px", fontSize: "14px" }}>{t.back}</button>
         {lang === 'de' ? (
-          <>
-            {page === "impressum" && <ImpressumDE />}
-            {page === "agb" && <AGBDE />}
-            {page === "datenschutz" && <DatenschutzDE />}
-          </>
+          <>{page === "impressum" && <ImpressumDE />}{page === "agb" && <AGBDE />}{page === "datenschutz" && <DatenschutzDE />}</>
         ) : <LegalEN page={page} />}
       </div>
     </div>
@@ -374,9 +426,36 @@ export default function MrInvestor() {
 
   return (
     <div style={{ minHeight: "100vh", background: "#0a0a0f", fontFamily: "'Georgia', serif", color: "#e8e0d0", display: "flex", flexDirection: "column" }}>
+      
+      {/* Sidebar */}
+      {showSidebar && isPremium && (
+        <div style={{ position: "fixed", inset: 0, zIndex: 100, display: "flex" }}>
+          <div style={{ width: "280px", background: "#0d0d15", borderRight: "1px solid #2a2a3a", display: "flex", flexDirection: "column", height: "100%" }}>
+            <div style={{ padding: "16px", borderBottom: "1px solid #2a2a3a", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+              <div style={{ color: "#f0d080", fontWeight: "bold", letterSpacing: "1px" }}>{t.chats}</div>
+              <button onClick={() => setShowSidebar(false)} style={{ background: "transparent", border: "none", color: "#888", cursor: "pointer", fontSize: "18px" }}>✕</button>
+            </div>
+            <div style={{ padding: "12px" }}>
+              <button onClick={createNewChat} style={{ width: "100%", background: gold, color: "#0a0a0f", border: "none", padding: "10px", borderRadius: "8px", cursor: "pointer", fontWeight: "bold", fontSize: "13px" }}>+ {t.newChat}</button>
+            </div>
+            <div style={{ flex: 1, overflowY: "auto", padding: "0 12px" }}>
+              {chats.map(chat => (
+                <div key={chat.id} onClick={() => switchChat(chat.id)} style={{ padding: "10px 12px", borderRadius: "8px", cursor: "pointer", marginBottom: "4px", background: currentChatId === chat.id ? "#1a1a2a" : "transparent", border: currentChatId === chat.id ? "1px solid #2a2a3a" : "1px solid transparent", display: "flex", alignItems: "center", justifyContent: "space-between", gap: "8px" }}>
+                  <div style={{ fontSize: "13px", color: "#c8c0b0", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>💬 {chat.title}</div>
+                  <button onClick={(e) => deleteChat(chat.id, e)} style={{ background: "transparent", border: "none", color: "#555", cursor: "pointer", fontSize: "12px", flexShrink: 0 }}>🗑️</button>
+                </div>
+              ))}
+            </div>
+          </div>
+          <div style={{ flex: 1, background: "rgba(0,0,0,0.5)" }} onClick={() => setShowSidebar(false)} />
+        </div>
+      )}
+
+      {/* Header */}
       <div style={{ borderBottom: "1px solid #2a2a3a", padding: "12px 16px", background: "linear-gradient(180deg, #12121a 0%, #0a0a0f 100%)" }}>
         <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "8px" }}>
           <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+            {isPremium && <button onClick={() => setShowSidebar(true)} style={{ background: "transparent", border: "1px solid #2a2a3a", borderRadius: "6px", padding: "6px 8px", cursor: "pointer", color: "#888", fontSize: "16px" }}>☰</button>}
             <div style={{ width: "36px", height: "36px", borderRadius: "50%", background: gold, display: "flex", alignItems: "center", justifyContent: "center", fontSize: "16px", fontWeight: "bold", color: "#0a0a0f" }}>M</div>
             <div>
               <div style={{ fontSize: "15px", fontWeight: "bold", letterSpacing: "1px", color: "#f0d080" }}>{t.title}</div>
@@ -392,11 +471,11 @@ export default function MrInvestor() {
           {!isPremium && <div style={{ fontSize: "11px", color: freeQuestions <= 1 ? "#e07050" : "#888", background: "#1a1a25", padding: "3px 8px", borderRadius: "20px", border: `1px solid ${freeQuestions <= 1 ? "#e07050" : "#2a2a3a"}` }}>{freeQuestions}/{FREE_LIMIT} {t.freeOf}</div>}
           {isPremium && <div style={{ fontSize: "11px", color: "#c9a84c", background: "rgba(201,168,76,0.1)", padding: "3px 10px", borderRadius: "20px", border: "1px solid #c9a84c" }}>{t.premium}</div>}
           {isPremium && <button onClick={() => window.open(STRIPE_PORTAL, '_blank')} style={{ fontSize: "11px", color: "#666", background: "transparent", border: "1px solid #2a2a3a", padding: "3px 8px", borderRadius: "20px", cursor: "pointer" }}>{t.manageAbo}</button>}
-          {messages.length > 0 && <button onClick={clearHistory} style={{ background: "transparent", color: "#555", border: "1px solid #2a2a3a", padding: "3px 8px", borderRadius: "20px", cursor: "pointer", fontSize: "11px" }}>{t.deleteHistory}</button>}
           {!isPremium && <button onClick={() => setShowUpgrade(true)} style={{ background: gold, color: "#0a0a0f", border: "none", padding: "5px 12px", borderRadius: "20px", cursor: "pointer", fontSize: "12px", fontWeight: "bold" }}>{t.upgrade}</button>}
         </div>
       </div>
 
+      {/* Chat */}
       <div style={{ flex: 1, overflowY: "auto", padding: "24px", maxWidth: "720px", width: "100%", margin: "0 auto", boxSizing: "border-box" }}>
         {showWelcome && (
           <div style={{ textAlign: "center", padding: "40px 0" }}>
@@ -420,6 +499,7 @@ export default function MrInvestor() {
         <div ref={messagesEndRef} />
       </div>
 
+      {/* Input */}
       <div style={{ borderTop: "1px solid #2a2a3a", padding: "16px 24px", background: "#0a0a0f", maxWidth: "720px", width: "100%", margin: "0 auto", boxSizing: "border-box" }}>
         {!isPremium && freeQuestions <= 0 ? (
           <div style={{ textAlign: "center" }}>
@@ -435,8 +515,9 @@ export default function MrInvestor() {
         <FooterLinks />
       </div>
 
+      {/* Upgrade Modal */}
       {showUpgrade && (
-        <div style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.8)", display: "flex", alignItems: "center", justifyContent: "center", zIndex: 100, padding: "20px" }} onClick={() => setShowUpgrade(false)}>
+        <div style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.8)", display: "flex", alignItems: "center", justifyContent: "center", zIndex: 150, padding: "20px" }} onClick={() => setShowUpgrade(false)}>
           <div style={{ background: "#12121a", border: "1px solid #c9a84c44", borderRadius: "16px", padding: "32px", maxWidth: "400px", width: "100%" }} onClick={e => e.stopPropagation()}>
             <div style={{ textAlign: "center", marginBottom: "24px" }}>
               <h3 style={{ color: "#f0d080", fontSize: "20px", letterSpacing: "2px" }}>{t.premiumTitle}</h3>
@@ -459,3 +540,4 @@ export default function MrInvestor() {
     </div>
   );
 }
+ 
