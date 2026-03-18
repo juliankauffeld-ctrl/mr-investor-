@@ -9,6 +9,7 @@ const supabase = createClient(
 const STRIPE_LINK = "https://buy.stripe.com/cNi6oAaZt7YK6Br6pr38401";
 const STRIPE_PORTAL = "https://billing.stripe.com/p/login/9B67sEebF2Eq9NDcNP38400";
 const FREE_LIMIT = 5;
+const PREMIUM_DAILY_LIMIT = 100;
 
 const translations = {
   de: {
@@ -239,13 +240,20 @@ export default function MrInvestor() {
     }
   };
 
+  const getPremiumDailyQuestions = () => {
+    const today = getTodayKey();
+    const stored = JSON.parse(localStorage.getItem("premiumDaily") || "{}");
+    if (stored.date === today) return Math.max(0, PREMIUM_DAILY_LIMIT - (stored.used || 0));
+    return PREMIUM_DAILY_LIMIT;
+  };
+
   const checkPremium = async (userId) => {
     const { data } = await supabase.from("profiles").select("is_premium, free_questions_used").eq("id", userId).single();
     if (data) {
       const premium = data.is_premium || false;
       setIsPremium(premium);
       if (!premium) setFreeQuestions(getDailyQuestions());
-      else { setFreeQuestions(999); loadChats(userId); }
+      else { setFreeQuestions(getPremiumDailyQuestions()); loadChats(userId); }
     }
   };
 
@@ -268,10 +276,17 @@ export default function MrInvestor() {
 
   const incrementDailyUsage = () => {
     const today = getTodayKey();
-    const stored = JSON.parse(localStorage.getItem('daily') || '{}');
-    const used = stored.date === today ? (stored.used || 0) + 1 : 1;
-    localStorage.setItem('daily', JSON.stringify({ date: today, used }));
-    setFreeQuestions(Math.max(0, FREE_LIMIT - used));
+    if (isPremium) {
+      const stored = JSON.parse(localStorage.getItem("premiumDaily") || "{}");
+      const used = stored.date === today ? (stored.used || 0) + 1 : 1;
+      localStorage.setItem("premiumDaily", JSON.stringify({ date: today, used }));
+      setFreeQuestions(Math.max(0, PREMIUM_DAILY_LIMIT - used));
+    } else {
+      const stored = JSON.parse(localStorage.getItem("daily") || "{}");
+      const used = stored.date === today ? (stored.used || 0) + 1 : 1;
+      localStorage.setItem("daily", JSON.stringify({ date: today, used }));
+      setFreeQuestions(Math.max(0, FREE_LIMIT - used));
+    }
   };
 
   const handleImageSelect = (e) => {
