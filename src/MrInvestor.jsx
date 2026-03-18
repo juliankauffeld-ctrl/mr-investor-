@@ -482,7 +482,7 @@ export default function MrInvestor() {
               <div style={{ fontSize: "13px", color: "#c8c0b0" }}>{lang === 'de' ? 'Upgrade auf Premium für unbegrenzte Fragen, Chat-Verlauf und Bild-Analyse!' : 'Upgrade to Premium for unlimited questions, chat history and image analysis!'}</div>
             </div>
             <button onClick={() => setShowOnboarding(false)} style={{ width: "100%", background: "linear-gradient(135deg, #c9a84c, #f0d080)", color: "#0a0a0f", border: "none", padding: "14px", borderRadius: "8px", cursor: "pointer", fontWeight: "bold", fontSize: "15px" }}>
-              {lang === 'de' ? 'Los geht's! 🚀' : 'Let's go! 🚀'}
+              {lang === 'de' ? "Los geht's! 🚀" : "Let's go! 🚀"}
             </button>
           </div>
         </div>
@@ -636,7 +636,7 @@ export default function MrInvestor() {
               <div style={{ fontSize: "13px", color: "#c8c0b0" }}>{lang === 'de' ? 'Upgrade auf Premium für unbegrenzte Fragen, Chat-Verlauf und Bild-Analyse!' : 'Upgrade to Premium for unlimited questions, chat history and image analysis!'}</div>
             </div>
             <button onClick={() => setShowOnboarding(false)} style={{ width: "100%", background: "linear-gradient(135deg, #c9a84c, #f0d080)", color: "#0a0a0f", border: "none", padding: "14px", borderRadius: "8px", cursor: "pointer", fontWeight: "bold", fontSize: "15px" }}>
-              {lang === 'de' ? 'Los geht's! 🚀' : 'Let's go! 🚀'}
+              {lang === 'de' ? "Los geht's! 🚀" : "Let's go! 🚀"}
             </button>
           </div>
         </div>
