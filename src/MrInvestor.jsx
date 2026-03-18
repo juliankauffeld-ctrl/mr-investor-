@@ -180,6 +180,7 @@ export default function MrInvestor() {
   const [password, setPassword] = useState("");
   const [authLoading, setAuthLoading] = useState(false);
   const [authError, setAuthError] = useState("");
+  const [forgotSent, setForgotSent] = useState(false);
   const [page, setPage] = useState("home");
   const [chats, setChats] = useState([]);
   const [currentChatId, setCurrentChatId] = useState(null);
@@ -273,7 +274,29 @@ export default function MrInvestor() {
     setAuthLoading(false);
   };
 
+
+  const handleForgotPassword = async () => {
+    if (!email) { setAuthError(lang === 'de' ? 'Bitte Email eingeben' : 'Please enter your email'); return; }
+    const { error } = await supabase.auth.resetPasswordForEmail(email);
+    if (error) setAuthError(error.message);
+    else { setForgotSent(true); setAuthError(lang === 'de' ? '✅ Reset-Link gesendet! Prüfe dein Postfach.' : '✅ Reset link sent! Check your inbox.'); }
+  };
   const handleLogout = async () => { await supabase.auth.signOut(); };
+
+  const deleteAccount = async () => {
+    const confirmed = window.confirm(lang === 'de' ? 'Account wirklich löschen? Alle Daten werden permanent gelöscht.' : 'Really delete account? All data will be permanently deleted.');
+    if (!confirmed) return;
+    try {
+      await supabase.from("messages").delete().eq("user_id", user.id);
+      await supabase.from("chats").delete().eq("user_id", user.id);
+      await supabase.from("profiles").delete().eq("id", user.id);
+      await supabase.auth.admin?.deleteUser(user.id);
+      await supabase.auth.signOut();
+    } catch {
+      await supabase.auth.signOut();
+    }
+  };
+
 
   const incrementDailyUsage = () => {
     const today = getTodayKey();
@@ -416,6 +439,7 @@ export default function MrInvestor() {
           </button>
           {authMode === "register" && <p style={{ color: "#666", fontSize: "12px", textAlign: "center", marginTop: "12px" }}>{t.freeInfo}</p>}
           <p style={{ textAlign: "center", color: "#888", fontSize: "13px", cursor: "pointer", marginTop: "12px" }} onClick={() => { setAuthMode(authMode === "login" ? "register" : "login"); setAuthError(""); }}>{authMode === "login" ? t.noAccount : t.hasAccount}</p>
+          {authMode === "login" && <p onClick={handleForgotPassword} style={{ textAlign: "center", color: "#555", fontSize: "12px", cursor: "pointer", marginTop: "8px" }}>{lang === 'de' ? 'Passwort vergessen?' : 'Forgot password?'}</p>}
         </div>
         <div style={{ textAlign: "center", marginTop: "20px", fontSize: "11px", color: "#444" }}>
           <span onClick={() => setPage("impressum")} style={{ cursor: "pointer", color: "#555" }}>{t.impressum}</span> &nbsp;|&nbsp;
@@ -527,6 +551,9 @@ export default function MrInvestor() {
           </div>
         )}
         <FooterLinks />
+      <div style={{ textAlign: "center", marginTop: "4px" }}>
+        <span onClick={deleteAccount} style={{ fontSize: "10px", color: "#333", cursor: "pointer" }}>{lang === 'de' ? 'Account löschen' : 'Delete account'}</span>
+      </div>
       </div>
 
       {showUpgrade && (
