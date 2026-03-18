@@ -186,6 +186,7 @@ export default function MrInvestor() {
   const [currentChatId, setCurrentChatId] = useState(null);
   const [showSidebar, setShowSidebar] = useState(false);
   const [showInstallBanner, setShowInstallBanner] = useState(() => !localStorage.getItem('installDismissed'));
+  const [showOnboarding, setShowOnboarding] = useState(false);
   const [selectedImage, setSelectedImage] = useState(null);
   const [imagePreview, setImagePreview] = useState(null);
   const messagesEndRef = useRef(null);
@@ -211,6 +212,13 @@ export default function MrInvestor() {
     });
     return () => subscription.unsubscribe();
   }, []);
+
+  const checkFirstLogin = () => {
+    if (!localStorage.getItem('onboardingDone')) {
+      setShowOnboarding(true);
+      localStorage.setItem('onboardingDone', '1');
+    }
+  };
 
   const loadChats = async (userId) => {
     const { data } = await supabase.from("chats").select("*").eq("user_id", userId).order("created_at", { ascending: false });
@@ -254,6 +262,7 @@ export default function MrInvestor() {
     if (data) {
       const premium = data.is_premium || false;
       setIsPremium(premium);
+      checkFirstLogin();
       if (!premium) setFreeQuestions(getDailyQuestions());
       else { setFreeQuestions(getPremiumDailyQuestions()); loadChats(userId); }
     }
@@ -451,6 +460,27 @@ export default function MrInvestor() {
       {isPremium && (
         <button onClick={() => setShowSidebar(true)} style={{ position: "fixed", bottom: "130px", left: "16px", width: "32px", height: "32px", borderRadius: "50%", background: "linear-gradient(135deg, #c9a84c, #f0d080)", border: "none", cursor: "pointer", fontSize: "13px", color: "#0a0a0f", zIndex: 40, boxShadow: "0 2px 8px rgba(201,168,76,0.3)", display: "flex", alignItems: "center", justifyContent: "center" }}>☰</button>
       )}
+
+      {showOnboarding && (
+        <div style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.85)", display: "flex", alignItems: "center", justifyContent: "center", zIndex: 200, padding: "20px" }}>
+          <div style={{ background: "#12121a", border: "1px solid #c9a84c44", borderRadius: "16px", padding: "32px", maxWidth: "380px", width: "100%", textAlign: "center" }}>
+            <div style={{ width: "70px", height: "70px", borderRadius: "50%", background: "linear-gradient(135deg, #c9a84c, #f0d080)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "30px", fontWeight: "bold", color: "#0a0a0f", margin: "0 auto 20px" }}>M</div>
+            <h2 style={{ color: "#f0d080", fontSize: "18px", letterSpacing: "2px", marginBottom: "12px" }}>{lang === 'de' ? 'WILLKOMMEN! 🎉' : 'WELCOME! 🎉'}</h2>
+            <p style={{ color: "#c8c0b0", fontSize: "14px", lineHeight: "1.7", marginBottom: "24px" }}>
+              {lang === 'de' 
+                ? 'Mr. Investor ist dein persönlicher KI-Finanzassistent. Stelle Fragen zu ETFs, S&P 500, Sparstrategien und mehr. Du hast täglich 5 kostenlose Fragen.' 
+                : 'Mr. Investor is your personal AI finance assistant. Ask questions about ETFs, S&P 500, saving strategies and more. You have 5 free questions daily.'}
+            </p>
+            <div style={{ background: "#0a0a0f", borderRadius: "8px", padding: "12px", marginBottom: "20px" }}>
+              <div style={{ fontSize: "13px", color: "#888", marginBottom: "6px" }}>💡 {lang === 'de' ? 'Tipp' : 'Tip'}</div>
+              <div style={{ fontSize: "13px", color: "#c8c0b0" }}>{lang === 'de' ? 'Upgrade auf Premium für unbegrenzte Fragen, Chat-Verlauf und Bild-Analyse!' : 'Upgrade to Premium for unlimited questions, chat history and image analysis!'}</div>
+            </div>
+            <button onClick={() => setShowOnboarding(false)} style={{ width: "100%", background: "linear-gradient(135deg, #c9a84c, #f0d080)", color: "#0a0a0f", border: "none", padding: "14px", borderRadius: "8px", cursor: "pointer", fontWeight: "bold", fontSize: "15px" }}>
+              {lang === 'de' ? 'Los geht's! 🚀' : 'Let's go! 🚀'}
+            </button>
+          </div>
+        </div>
+      )}
       <LegalModal />
     </div>
   );
@@ -582,6 +612,27 @@ export default function MrInvestor() {
 
       {isPremium && (
         <button onClick={() => setShowSidebar(true)} style={{ position: "fixed", bottom: "130px", left: "16px", width: "32px", height: "32px", borderRadius: "50%", background: "linear-gradient(135deg, #c9a84c, #f0d080)", border: "none", cursor: "pointer", fontSize: "13px", color: "#0a0a0f", zIndex: 40, boxShadow: "0 2px 8px rgba(201,168,76,0.3)", display: "flex", alignItems: "center", justifyContent: "center" }}>☰</button>
+      )}
+
+      {showOnboarding && (
+        <div style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.85)", display: "flex", alignItems: "center", justifyContent: "center", zIndex: 200, padding: "20px" }}>
+          <div style={{ background: "#12121a", border: "1px solid #c9a84c44", borderRadius: "16px", padding: "32px", maxWidth: "380px", width: "100%", textAlign: "center" }}>
+            <div style={{ width: "70px", height: "70px", borderRadius: "50%", background: "linear-gradient(135deg, #c9a84c, #f0d080)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "30px", fontWeight: "bold", color: "#0a0a0f", margin: "0 auto 20px" }}>M</div>
+            <h2 style={{ color: "#f0d080", fontSize: "18px", letterSpacing: "2px", marginBottom: "12px" }}>{lang === 'de' ? 'WILLKOMMEN! 🎉' : 'WELCOME! 🎉'}</h2>
+            <p style={{ color: "#c8c0b0", fontSize: "14px", lineHeight: "1.7", marginBottom: "24px" }}>
+              {lang === 'de' 
+                ? 'Mr. Investor ist dein persönlicher KI-Finanzassistent. Stelle Fragen zu ETFs, S&P 500, Sparstrategien und mehr. Du hast täglich 5 kostenlose Fragen.' 
+                : 'Mr. Investor is your personal AI finance assistant. Ask questions about ETFs, S&P 500, saving strategies and more. You have 5 free questions daily.'}
+            </p>
+            <div style={{ background: "#0a0a0f", borderRadius: "8px", padding: "12px", marginBottom: "20px" }}>
+              <div style={{ fontSize: "13px", color: "#888", marginBottom: "6px" }}>💡 {lang === 'de' ? 'Tipp' : 'Tip'}</div>
+              <div style={{ fontSize: "13px", color: "#c8c0b0" }}>{lang === 'de' ? 'Upgrade auf Premium für unbegrenzte Fragen, Chat-Verlauf und Bild-Analyse!' : 'Upgrade to Premium for unlimited questions, chat history and image analysis!'}</div>
+            </div>
+            <button onClick={() => setShowOnboarding(false)} style={{ width: "100%", background: "linear-gradient(135deg, #c9a84c, #f0d080)", color: "#0a0a0f", border: "none", padding: "14px", borderRadius: "8px", cursor: "pointer", fontWeight: "bold", fontSize: "15px" }}>
+              {lang === 'de' ? 'Los geht's! 🚀' : 'Let's go! 🚀'}
+            </button>
+          </div>
+        </div>
       )}
       <LegalModal />
       {showInstallBanner && (
