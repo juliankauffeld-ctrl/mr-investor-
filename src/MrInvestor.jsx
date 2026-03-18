@@ -447,6 +447,10 @@ export default function MrInvestor() {
           <span onClick={() => setPage("datenschutz")} style={{ cursor: "pointer", color: "#555" }}>{t.datenschutz}</span>
         </div>
       </div>
+
+      {isPremium && (
+        <button onClick={() => setShowSidebar(true)} style={{ position: "fixed", bottom: "90px", left: "16px", width: "44px", height: "44px", borderRadius: "50%", background: "linear-gradient(135deg, #c9a84c, #f0d080)", border: "none", cursor: "pointer", fontSize: "18px", color: "#0a0a0f", zIndex: 40, boxShadow: "0 4px 12px rgba(201,168,76,0.4)", display: "flex", alignItems: "center", justifyContent: "center" }}>☰</button>
+      )}
       <LegalModal />
     </div>
   );
@@ -480,7 +484,7 @@ export default function MrInvestor() {
       <div style={{ borderBottom: "1px solid #2a2a3a", padding: "12px 16px", background: "linear-gradient(180deg, #12121a 0%, #0a0a0f 100%)" }}>
         <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "8px" }}>
           <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-            {isPremium && <button onClick={() => setShowSidebar(true)} style={{ background: "transparent", border: "1px solid #2a2a3a", borderRadius: "6px", padding: "6px 8px", cursor: "pointer", color: "#888", fontSize: "16px" }}>☰</button>}
+
             <div style={{ width: "36px", height: "36px", borderRadius: "50%", background: gold, display: "flex", alignItems: "center", justifyContent: "center", fontSize: "16px", fontWeight: "bold", color: "#0a0a0f" }}>M</div>
             <div>
               <div style={{ fontSize: "15px", fontWeight: "bold", letterSpacing: "1px", color: "#f0d080" }}>{t.title}</div>
@@ -575,6 +579,10 @@ export default function MrInvestor() {
         </div>
       )}
 
+
+      {isPremium && (
+        <button onClick={() => setShowSidebar(true)} style={{ position: "fixed", bottom: "90px", left: "16px", width: "44px", height: "44px", borderRadius: "50%", background: "linear-gradient(135deg, #c9a84c, #f0d080)", border: "none", cursor: "pointer", fontSize: "18px", color: "#0a0a0f", zIndex: 40, boxShadow: "0 4px 12px rgba(201,168,76,0.4)", display: "flex", alignItems: "center", justifyContent: "center" }}>☰</button>
+      )}
       <LegalModal />
       {showInstallBanner && (
         <div style={{ position: "fixed", bottom: "80px", left: "50%", transform: "translateX(-50%)", background: "#12121a", border: "1px solid #c9a84c44", borderRadius: "12px", padding: "12px 16px", display: "flex", alignItems: "center", gap: "10px", zIndex: 50, maxWidth: "340px", width: "calc(100% - 32px)", boxShadow: "0 4px 20px rgba(0,0,0,0.5)" }}>
