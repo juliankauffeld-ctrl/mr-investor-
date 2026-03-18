@@ -184,6 +184,7 @@ export default function MrInvestor() {
   const [chats, setChats] = useState([]);
   const [currentChatId, setCurrentChatId] = useState(null);
   const [showSidebar, setShowSidebar] = useState(false);
+  const [showInstallBanner, setShowInstallBanner] = useState(() => !localStorage.getItem('installDismissed'));
   const [selectedImage, setSelectedImage] = useState(null);
   const [imagePreview, setImagePreview] = useState(null);
   const messagesEndRef = useRef(null);
@@ -548,6 +549,17 @@ export default function MrInvestor() {
       )}
 
       <LegalModal />
+      {showInstallBanner && (
+        <div style={{ position: "fixed", bottom: "80px", left: "50%", transform: "translateX(-50%)", background: "#12121a", border: "1px solid #c9a84c44", borderRadius: "12px", padding: "12px 16px", display: "flex", alignItems: "center", gap: "10px", zIndex: 50, maxWidth: "340px", width: "calc(100% - 32px)", boxShadow: "0 4px 20px rgba(0,0,0,0.5)" }}>
+          <span style={{ fontSize: "20px" }}>📱</span>
+          <div style={{ flex: 1 }}>
+            <div style={{ fontSize: "13px", color: "#f0d080", fontWeight: "bold", marginBottom: "2px" }}>{lang === 'de' ? 'Als App speichern' : 'Save as App'}</div>
+            <div style={{ fontSize: "11px", color: "#888" }}>{lang === 'de' ? 'Menü → Zum Startbildschirm' : 'Menu → Add to Home Screen'}</div>
+          </div>
+          <button onClick={() => { setShowInstallBanner(false); localStorage.setItem('installDismissed', '1'); }} style={{ background: "transparent", border: "none", color: "#666", cursor: "pointer", fontSize: "16px", padding: "4px" }}>✕</button>
+        </div>
+      )}
+
       <style>{`@keyframes pulse { 0%, 100% { opacity: 0.3; } 50% { opacity: 1; } } * { margin: 0; padding: 0; box-sizing: border-box; } body { background: #0a0a0f; margin: 0; padding: 0; }`}</style>
     </div>
   );
