@@ -40,6 +40,20 @@ export default async function handler(req, res) {
     }
   }
 
+  if (event.type === 'customer.subscription.deleted') {
+    const subscription = event.data.object;
+    const customerId = subscription.customer;
+    const customer = await stripe.customers.retrieve(customerId);
+    const email = customer.email;
+    if (email) {
+      const { data } = await supabase.auth.admin.listUsers();
+      const user = data?.users?.find(u => u.email === email);
+      if (user?.id) {
+        await supabase.from('profiles').upsert({ id: user.id, is_premium: false });
+      }
+    }
+  }
+
   res.status(200).json({ received: true });
 }
 
