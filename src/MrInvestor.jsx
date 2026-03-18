@@ -449,7 +449,7 @@ export default function MrInvestor() {
       </div>
 
       {isPremium && (
-        <button onClick={() => setShowSidebar(true)} style={{ position: "fixed", bottom: "20px", left: "16px", width: "32px", height: "32px", borderRadius: "50%", background: "linear-gradient(135deg, #c9a84c, #f0d080)", border: "none", cursor: "pointer", fontSize: "13px", color: "#0a0a0f", zIndex: 40, boxShadow: "0 2px 8px rgba(201,168,76,0.3)", display: "flex", alignItems: "center", justifyContent: "center" }}>☰</button>
+        <button onClick={() => setShowSidebar(true)} style={{ position: "fixed", bottom: "130px", left: "16px", width: "32px", height: "32px", borderRadius: "50%", background: "linear-gradient(135deg, #c9a84c, #f0d080)", border: "none", cursor: "pointer", fontSize: "13px", color: "#0a0a0f", zIndex: 40, boxShadow: "0 2px 8px rgba(201,168,76,0.3)", display: "flex", alignItems: "center", justifyContent: "center" }}>☰</button>
       )}
       <LegalModal />
     </div>
@@ -581,7 +581,7 @@ export default function MrInvestor() {
 
 
       {isPremium && (
-        <button onClick={() => setShowSidebar(true)} style={{ position: "fixed", bottom: "20px", left: "16px", width: "32px", height: "32px", borderRadius: "50%", background: "linear-gradient(135deg, #c9a84c, #f0d080)", border: "none", cursor: "pointer", fontSize: "13px", color: "#0a0a0f", zIndex: 40, boxShadow: "0 2px 8px rgba(201,168,76,0.3)", display: "flex", alignItems: "center", justifyContent: "center" }}>☰</button>
+        <button onClick={() => setShowSidebar(true)} style={{ position: "fixed", bottom: "130px", left: "16px", width: "32px", height: "32px", borderRadius: "50%", background: "linear-gradient(135deg, #c9a84c, #f0d080)", border: "none", cursor: "pointer", fontSize: "13px", color: "#0a0a0f", zIndex: 40, boxShadow: "0 2px 8px rgba(201,168,76,0.3)", display: "flex", alignItems: "center", justifyContent: "center" }}>☰</button>
       )}
       <LegalModal />
       {showInstallBanner && (
