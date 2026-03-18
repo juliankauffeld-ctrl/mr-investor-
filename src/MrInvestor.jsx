@@ -292,6 +292,12 @@ export default function MrInvestor() {
   };
   const handleLogout = async () => { await supabase.auth.signOut(); };
 
+  const handleChangePassword = async () => {
+    const { error } = await supabase.auth.resetPasswordForEmail(user.email);
+    if (!error) alert(lang === 'de' ? '✅ Passwort-Reset Email gesendet! Prüfe dein Postfach.' : '✅ Password reset email sent! Check your inbox.');
+  };
+
+
   const deleteAccount = async () => {
     const confirmed = window.confirm(lang === 'de' ? 'Account wirklich löschen? Alle Daten werden permanent gelöscht.' : 'Really delete account? All data will be permanently deleted.');
     if (!confirmed) return;
@@ -476,7 +482,7 @@ export default function MrInvestor() {
               <div style={{ fontSize: "13px", color: "#c8c0b0" }}>{lang === 'de' ? 'Upgrade auf Premium für unbegrenzte Fragen, Chat-Verlauf und Bild-Analyse!' : 'Upgrade to Premium for unlimited questions, chat history and image analysis!'}</div>
             </div>
             <button onClick={() => setShowOnboarding(false)} style={{ width: "100%", background: "linear-gradient(135deg, #c9a84c, #f0d080)", color: "#0a0a0f", border: "none", padding: "14px", borderRadius: "8px", cursor: "pointer", fontWeight: "bold", fontSize: "15px" }}>
-              {lang === 'de' ? "Los geht's! 🚀" : "Let's go! 🚀"}
+              {lang === 'de' ? 'Los geht's! 🚀' : 'Let's go! 🚀'}
             </button>
           </div>
         </div>
@@ -523,6 +529,7 @@ export default function MrInvestor() {
           </div>
           <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
             <LangSwitch />
+            <button onClick={handleChangePassword} style={{ background: "transparent", color: "#666", border: "1px solid #2a2a3a", padding: "5px 10px", borderRadius: "20px", cursor: "pointer", fontSize: "12px" }}>🔑</button>
             <button onClick={handleLogout} style={{ background: "transparent", color: "#666", border: "1px solid #2a2a3a", padding: "5px 10px", borderRadius: "20px", cursor: "pointer", fontSize: "12px" }}>{t.logout}</button>
           </div>
         </div>
@@ -629,7 +636,7 @@ export default function MrInvestor() {
               <div style={{ fontSize: "13px", color: "#c8c0b0" }}>{lang === 'de' ? 'Upgrade auf Premium für unbegrenzte Fragen, Chat-Verlauf und Bild-Analyse!' : 'Upgrade to Premium for unlimited questions, chat history and image analysis!'}</div>
             </div>
             <button onClick={() => setShowOnboarding(false)} style={{ width: "100%", background: "linear-gradient(135deg, #c9a84c, #f0d080)", color: "#0a0a0f", border: "none", padding: "14px", borderRadius: "8px", cursor: "pointer", fontWeight: "bold", fontSize: "15px" }}>
-              {lang === 'de' ? "Los geht's! 🚀" : "Let's go! 🚀"}
+              {lang === 'de' ? 'Los geht's! 🚀' : 'Let's go! 🚀'}
             </button>
           </div>
         </div>
