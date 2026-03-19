@@ -184,6 +184,8 @@ export default function MrInvestor() {
   const [currentChatId, setCurrentChatId] = useState(null);
   const [showSidebar, setShowSidebar] = useState(false);
   const [showInstallBanner, setShowInstallBanner] = useState(() => !localStorage.getItem('installDismissed'));
+  const [newPassword, setNewPassword] = useState('');
+  const [resetSuccess, setResetSuccess] = useState(false);
   const [showOnboarding, setShowOnboarding] = useState(false);
   const [selectedImage, setSelectedImage] = useState(null);
   const [imagePreview, setImagePreview] = useState(null);
@@ -297,6 +299,17 @@ export default function MrInvestor() {
     else { setForgotSent(true); setAuthError(lang === 'de' ? '✅ Reset-Link gesendet! Prüfe dein Postfach.' : '✅ Reset link sent! Check your inbox.'); }
   };
   const handleLogout = async () => { await supabase.auth.signOut(); };
+
+
+  const handleResetPassword = async () => {
+    if (!newPassword || newPassword.length < 6) {
+      alert(lang === 'de' ? 'Passwort muss mindestens 6 Zeichen haben' : 'Password must be at least 6 characters');
+      return;
+    }
+    const { error } = await supabase.auth.updateUser({ password: newPassword });
+    if (error) alert(error.message);
+    else { setResetSuccess(true); setTimeout(() => window.location.href = '/', 2000); }
+  };
 
   const handleChangePassword = async () => {
     const { error } = await supabase.auth.resetPasswordForEmail(user.email);
@@ -660,3 +673,4 @@ export default function MrInvestor() {
     </div>
   );
 }
+                      
