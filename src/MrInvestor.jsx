@@ -159,9 +159,7 @@ export default function MrInvestor() {
   };
 
   const getDailyQuestions = () => {
-    const today = getTodayKey();
-    const stored = JSON.parse(localStorage.getItem('daily') || '{}');
-    if (stored.date === today) return Math.max(0, FREE_LIMIT - (stored.used || 0));
+    // Still used as fallback before Supabase loads
     return FREE_LIMIT;
   };
 
@@ -251,20 +249,28 @@ export default function MrInvestor() {
   };
 
   const getPremiumDailyQuestions = () => {
-    const today = getTodayKey();
-    const stored = JSON.parse(localStorage.getItem("premiumDaily") || "{}");
-    if (stored.date === today) return Math.max(0, PREMIUM_DAILY_LIMIT - (stored.used || 0));
     return PREMIUM_DAILY_LIMIT;
   };
 
   const checkPremium = async (userId) => {
-    const { data } = await supabase.from("profiles").select("is_premium, free_questions_used").eq("id", userId).single();
+    const today = getTodayKey();
+    const { data } = await supabase.from("profiles").select("is_premium, daily_questions_used, daily_reset_date").eq("id", userId).single();
     if (data) {
       const premium = data.is_premium || false;
       setIsPremium(premium);
       checkFirstLogin();
-      if (!premium) setFreeQuestions(getDailyQuestions());
-      else { setFreeQuestions(getPremiumDailyQuestions()); loadChats(userId); }
+      
+      // Reset daily count if it's a new day
+      if (data.daily_reset_date !== today) {
+        await supabase.from("profiles").upsert({ id: userId, daily_questions_used: 0, daily_reset_date: today });
+        setFreeQuestions(premium ? PREMIUM_DAILY_LIMIT : FREE_LIMIT);
+      } else {
+        const used = data.daily_questions_used || 0;
+        const limit = premium ? PREMIUM_DAILY_LIMIT : FREE_LIMIT;
+        setFreeQuestions(Math.max(0, limit - used));
+      }
+      
+      if (premium) loadChats(userId);
     }
   };
 
@@ -313,19 +319,16 @@ export default function MrInvestor() {
   };
 
 
-  const incrementDailyUsage = () => {
+  const incrementDailyUsage = async () => {
+    if (!user) return;
     const today = getTodayKey();
-    if (isPremium) {
-      const stored = JSON.parse(localStorage.getItem("premiumDaily") || "{}");
-      const used = stored.date === today ? (stored.used || 0) + 1 : 1;
-      localStorage.setItem("premiumDaily", JSON.stringify({ date: today, used }));
-      setFreeQuestions(Math.max(0, PREMIUM_DAILY_LIMIT - used));
-    } else {
-      const stored = JSON.parse(localStorage.getItem("daily") || "{}");
-      const used = stored.date === today ? (stored.used || 0) + 1 : 1;
-      localStorage.setItem("daily", JSON.stringify({ date: today, used }));
-      setFreeQuestions(Math.max(0, FREE_LIMIT - used));
-    }
+    const { data } = await supabase.from("profiles").select("daily_questions_used, daily_reset_date").eq("id", user.id).single();
+    const isNewDay = data?.daily_reset_date !== today;
+    const currentUsed = isNewDay ? 0 : (data?.daily_questions_used || 0);
+    const newUsed = currentUsed + 1;
+    const limit = isPremium ? PREMIUM_DAILY_LIMIT : FREE_LIMIT;
+    await supabase.from("profiles").upsert({ id: user.id, daily_questions_used: newUsed, daily_reset_date: today });
+    setFreeQuestions(Math.max(0, limit - newUsed));
   };
 
   const handleImageSelect = (e) => {
@@ -374,7 +377,7 @@ export default function MrInvestor() {
     if (isPremium && chatId) await supabase.from("messages").insert({ user_id: user.id, chat_id: chatId, role: "user", content: userText || t.uploadImage });
 
     if (!isPremium) {
-      incrementDailyUsage();
+      await incrementDailyUsage();
       const { data: profile } = await supabase.from("profiles").select("free_questions_used").eq("id", user.id).single();
       await supabase.from("profiles").upsert({ id: user.id, free_questions_used: (profile?.free_questions_used || 0) + 1 });
     }
@@ -529,7 +532,7 @@ export default function MrInvestor() {
           </div>
           <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
             <LangSwitch />
-            <button onClick={handleChangePassword} style={{ background: "transparent", color: "#666", border: "1px solid #2a2a3a", padding: "5px 10px", borderRadius: "20px", cursor: "pointer", fontSize: "12px" }}>🔑</button>
+            <button onClick={handleChangePassword} style={{ background: "transparent", color: "#666", border: "1px solid #2a2a3a", padding: "5px 10px", borderRadius: "20px", cursor: "pointer", fontSize: "12px" }}>{lang === 'de' ? 'PW ändern' : 'Change PW'}</button>
             <button onClick={handleLogout} style={{ background: "transparent", color: "#666", border: "1px solid #2a2a3a", padding: "5px 10px", borderRadius: "20px", cursor: "pointer", fontSize: "12px" }}>{t.logout}</button>
           </div>
         </div>
