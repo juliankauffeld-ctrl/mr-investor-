@@ -422,7 +422,7 @@ export default function MrInvestor() {
 
   const FooterLinks = () => (
     <div style={{ textAlign: "center", fontSize: "11px", color: "#444", marginTop: "8px" }}>
-      {t.disclaimer} &nbsp;|&nbsp;
+      {lang === 'de' ? 'Mr. Investor ist eine KI und kann Fehler machen. Keine Anlageberatung.' : 'Mr. Investor is an AI and can make mistakes. Not financial advice.'} &nbsp;|&nbsp;
       <span onClick={() => setPage("impressum")} style={{ cursor: "pointer", color: "#666" }}>{t.impressum}</span> &nbsp;|&nbsp;
       <span onClick={() => setPage("agb")} style={{ cursor: "pointer", color: "#666" }}>{t.agb}</span> &nbsp;|&nbsp;
       <span onClick={() => setPage("datenschutz")} style={{ cursor: "pointer", color: "#666" }}>{t.datenschutz}</span>
