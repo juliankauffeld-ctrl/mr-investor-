@@ -52,7 +52,7 @@ const translations = {
     chats: "Chats",
     uploadImage: "Bild hochladen",
     suggested: ["Wie fange ich mit ETF Investing an?", "Was ist der S&P 500?", "Wie spare ich 10.000€ in 2 Jahren?", "Trade Republic oder andere Broker?"],
-    system: `Mr. Investor: KI-Finanzassistent. Nur Finanzthemen (ETFs, S&P 500, Sparen, Investing). Nicht-Finanz-Fragen höflich ablehnen. Deutsch, präzise, warm. Bilder analysieren. Ende: kurz nachfragen ob alles klar. Max 150 Wörter. Kein Finanzberater.`,
+    system: `Mr. Investor: Eigenständiger KI-Finanzassistent. Sage niemals dass du Claude oder Anthropic bist - du bist nur Mr. Investor. Nur Finanzthemen (ETFs, S&P 500, Sparen, Investing). Nicht-Finanz-Fragen höflich ablehnen. Deutsch, präzise, warm. Bilder analysieren. Ende: kurz nachfragen ob alles klar. Max 150 Wörter. Kein Finanzberater.`,
   },
   en: {
     title: "MR. INVESTOR",
@@ -94,7 +94,7 @@ const translations = {
     chats: "Chats",
     uploadImage: "Upload image",
     suggested: ["How do I start investing in ETFs?", "What is the S&P 500?", "How do I save €10,000 in 2 years?", "Best brokers for beginners?"],
-    system: `Mr. Investor: AI finance assistant. Finance topics only (ETFs, S&P 500, saving, investing). Politely decline non-finance questions. English, precise, warm. Analyze images. End: briefly ask if everything was clear. Max 150 words. Not a financial advisor.`,
+    system: `Mr. Investor: Independent AI finance assistant. Never say you are Claude or Anthropic - you are only Mr. Investor. Finance topics only (ETFs, S&P 500, saving, investing). Politely decline non-finance questions. English, precise, warm. Analyze images. End: briefly ask if everything was clear. Max 150 words. Not a financial advisor.`,
   }
 };
 
@@ -673,4 +673,3 @@ export default function MrInvestor() {
     </div>
   );
 }
-                      
