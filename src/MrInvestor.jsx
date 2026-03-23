@@ -184,6 +184,8 @@ export default function MrInvestor() {
   const [currentChatId, setCurrentChatId] = useState(null);
   const [showSidebar, setShowSidebar] = useState(false);
   const [showInstallBanner, setShowInstallBanner] = useState(() => !localStorage.getItem('installDismissed'));
+  const [guestQuestions, setGuestQuestions] = useState(() => parseInt(localStorage.getItem('guestQ') || '0'));
+  const [showRegisterPrompt, setShowRegisterPrompt] = useState(false);
   const [newPassword, setNewPassword] = useState('');
   const [resetSuccess, setResetSuccess] = useState(false);
   const [showOnboarding, setShowOnboarding] = useState(false);
@@ -389,7 +391,7 @@ export default function MrInvestor() {
 
     if (isPremium && chatId) await supabase.from("messages").insert({ user_id: user.id, chat_id: chatId, role: "user", content: userText || t.uploadImage });
 
-    if (!isPremium) {
+    if (!isPremium && user) {
       await incrementDailyUsage();
       const { data: profile } = await supabase.from("profiles").select("free_questions_used").eq("id", user.id).single();
       await supabase.from("profiles").upsert({ id: user.id, free_questions_used: (profile?.free_questions_used || 0) + 1 });
@@ -448,7 +450,7 @@ export default function MrInvestor() {
     </div>
   );
 
-  if (!user) return (
+  if (!user && guestQuestions >= FREE_LIMIT) return (
     <div style={{ minHeight: "100vh", background: "#0a0a0f", fontFamily: "Georgia, serif", display: "flex", alignItems: "center", justifyContent: "center", padding: "20px" }}>
       <div style={{ maxWidth: "400px", width: "100%" }}>
         <div style={{ display: "flex", justifyContent: "flex-end", marginBottom: "16px" }}><LangSwitch /></div>
@@ -503,6 +505,24 @@ export default function MrInvestor() {
           </div>
         </div>
       )}
+
+      {showRegisterPrompt && !user && (
+        <div style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.85)", display: "flex", alignItems: "center", justifyContent: "center", zIndex: 200, padding: "20px" }}>
+          <div style={{ background: "#12121a", border: "1px solid #c9a84c44", borderRadius: "16px", padding: "32px", maxWidth: "400px", width: "100%", textAlign: "center" }}>
+            <div style={{ width: "70px", height: "70px", borderRadius: "50%", background: "linear-gradient(135deg, #c9a84c, #f0d080)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "28px", fontWeight: "bold", color: "#0a0a0f", margin: "0 auto 20px" }}>M</div>
+            <h2 style={{ color: "#f0d080", fontSize: "18px", letterSpacing: "2px", marginBottom: "12px" }}>{lang === 'de' ? 'KOSTENLOS REGISTRIEREN' : 'REGISTER FOR FREE'}</h2>
+            <p style={{ color: "#c8c0b0", fontSize: "14px", lineHeight: "1.7", marginBottom: "24px" }}>
+              {lang === 'de' ? 'Du hast deine 5 kostenlosen Fragen genutzt. Registriere dich kostenlos für 5 weitere Fragen täglich!' : 'You have used your 5 free questions. Register for free for 5 more questions daily!'}
+            </p>
+            <button onClick={() => { setShowRegisterPrompt(false); }} style={{ width: "100%", background: "linear-gradient(135deg, #c9a84c, #f0d080)", color: "#0a0a0f", border: "none", padding: "14px", borderRadius: "8px", cursor: "pointer", fontWeight: "bold", fontSize: "15px", marginBottom: "10px" }}>
+              {lang === 'de' ? 'Jetzt registrieren 🚀' : 'Register now 🚀'}
+            </button>
+            <button onClick={() => setShowRegisterPrompt(false)} style={{ width: "100%", background: "transparent", border: "none", color: "#666", cursor: "pointer" }}>
+              {lang === 'de' ? 'Schließen' : 'Close'}
+            </button>
+          </div>
+        </div>
+      )}
       <LegalModal />
     </div>
   );
@@ -550,7 +570,8 @@ export default function MrInvestor() {
           </div>
         </div>
         <div style={{ display: "flex", alignItems: "center", gap: "6px", flexWrap: "wrap" }}>
-          {!isPremium && <div style={{ fontSize: "11px", color: freeQuestions <= 1 ? "#e07050" : "#888", background: "#1a1a25", padding: "3px 8px", borderRadius: "20px", border: `1px solid ${freeQuestions <= 1 ? "#e07050" : "#2a2a3a"}` }}>{freeQuestions}/{FREE_LIMIT} {t.freeOf}</div>}
+          {!isPremium && !user && <div style={{ fontSize: "11px", color: (FREE_LIMIT - guestQuestions) <= 1 ? "#e07050" : "#888", background: "#1a1a25", padding: "3px 8px", borderRadius: "20px", border: `1px solid ${(FREE_LIMIT - guestQuestions) <= 1 ? "#e07050" : "#2a2a3a"}` }}>{FREE_LIMIT - guestQuestions}/{FREE_LIMIT} {t.freeOf}</div>}
+          {!isPremium && user && <div style={{ fontSize: "11px", color: freeQuestions <= 1 ? "#e07050" : "#888", background: "#1a1a25", padding: "3px 8px", borderRadius: "20px", border: `1px solid ${freeQuestions <= 1 ? "#e07050" : "#2a2a3a"}` }}>{freeQuestions}/{FREE_LIMIT} {t.freeOf}</div>}
           {isPremium && <div style={{ fontSize: "11px", color: "#c9a84c", background: "rgba(201,168,76,0.1)", padding: "3px 10px", borderRadius: "20px", border: "1px solid #c9a84c" }}>{t.premium}</div>}
           {isPremium && <button onClick={() => window.open(STRIPE_PORTAL, '_blank')} style={{ fontSize: "11px", color: "#666", background: "transparent", border: "1px solid #2a2a3a", padding: "3px 8px", borderRadius: "20px", cursor: "pointer" }}>{t.manageAbo}</button>}
           {!isPremium && <button onClick={() => setShowUpgrade(true)} style={{ background: gold, color: "#0a0a0f", border: "none", padding: "5px 12px", borderRadius: "20px", cursor: "pointer", fontSize: "12px", fontWeight: "bold" }}>{t.upgrade}</button>}
@@ -653,6 +674,24 @@ export default function MrInvestor() {
             </div>
             <button onClick={() => setShowOnboarding(false)} style={{ width: "100%", background: "linear-gradient(135deg, #c9a84c, #f0d080)", color: "#0a0a0f", border: "none", padding: "14px", borderRadius: "8px", cursor: "pointer", fontWeight: "bold", fontSize: "15px" }}>
               {lang === 'de' ? "Los geht's! 🚀" : "Let's go! 🚀"}
+            </button>
+          </div>
+        </div>
+      )}
+
+      {showRegisterPrompt && !user && (
+        <div style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.85)", display: "flex", alignItems: "center", justifyContent: "center", zIndex: 200, padding: "20px" }}>
+          <div style={{ background: "#12121a", border: "1px solid #c9a84c44", borderRadius: "16px", padding: "32px", maxWidth: "400px", width: "100%", textAlign: "center" }}>
+            <div style={{ width: "70px", height: "70px", borderRadius: "50%", background: "linear-gradient(135deg, #c9a84c, #f0d080)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "28px", fontWeight: "bold", color: "#0a0a0f", margin: "0 auto 20px" }}>M</div>
+            <h2 style={{ color: "#f0d080", fontSize: "18px", letterSpacing: "2px", marginBottom: "12px" }}>{lang === 'de' ? 'KOSTENLOS REGISTRIEREN' : 'REGISTER FOR FREE'}</h2>
+            <p style={{ color: "#c8c0b0", fontSize: "14px", lineHeight: "1.7", marginBottom: "24px" }}>
+              {lang === 'de' ? 'Du hast deine 5 kostenlosen Fragen genutzt. Registriere dich kostenlos für 5 weitere Fragen täglich!' : 'You have used your 5 free questions. Register for free for 5 more questions daily!'}
+            </p>
+            <button onClick={() => { setShowRegisterPrompt(false); }} style={{ width: "100%", background: "linear-gradient(135deg, #c9a84c, #f0d080)", color: "#0a0a0f", border: "none", padding: "14px", borderRadius: "8px", cursor: "pointer", fontWeight: "bold", fontSize: "15px", marginBottom: "10px" }}>
+              {lang === 'de' ? 'Jetzt registrieren 🚀' : 'Register now 🚀'}
+            </button>
+            <button onClick={() => setShowRegisterPrompt(false)} style={{ width: "100%", background: "transparent", border: "none", color: "#666", cursor: "pointer" }}>
+              {lang === 'de' ? 'Schließen' : 'Close'}
             </button>
           </div>
         </div>
