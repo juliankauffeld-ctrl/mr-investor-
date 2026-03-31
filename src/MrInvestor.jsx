@@ -158,16 +158,11 @@ export default function MrInvestor() {
     return browser.startsWith('de') ? 'de' : 'en';
   };
 
-  const getDailyQuestions = () => {
-    // Still used as fallback before Supabase loads
-    return FREE_LIMIT;
-  };
-
   const [lang, setLang] = useState(detectLang);
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
-  const [freeQuestions, setFreeQuestions] = useState(getDailyQuestions);
+  const [freeQuestions, setFreeQuestions] = useState(FREE_LIMIT);
   const [isPremium, setIsPremium] = useState(false);
   const [showUpgrade, setShowUpgrade] = useState(false);
   const [showWelcome, setShowWelcome] = useState(true);
@@ -178,7 +173,6 @@ export default function MrInvestor() {
   const [password, setPassword] = useState("");
   const [authLoading, setAuthLoading] = useState(false);
   const [authError, setAuthError] = useState("");
-  const [forgotSent, setForgotSent] = useState(false);
   const [page, setPage] = useState("home");
   const [chats, setChats] = useState([]);
   const [currentChatId, setCurrentChatId] = useState(null);
@@ -186,8 +180,6 @@ export default function MrInvestor() {
   const [showInstallBanner, setShowInstallBanner] = useState(() => !localStorage.getItem('installDismissed'));
   const [guestQuestions, setGuestQuestions] = useState(() => parseInt(localStorage.getItem('guestQ') || '0'));
   const [showRegisterPrompt, setShowRegisterPrompt] = useState(false);
-  const [newPassword, setNewPassword] = useState('');
-  const [resetSuccess, setResetSuccess] = useState(false);
   const [showOnboarding, setShowOnboarding] = useState(false);
   const [selectedImage, setSelectedImage] = useState(null);
   const [imagePreview, setImagePreview] = useState(null);
@@ -210,7 +202,10 @@ export default function MrInvestor() {
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
       setUser(session?.user ?? null);
       if (session?.user) checkPremium(session.user.id);
-      else { setMessages([]); setChats([]); setCurrentChatId(null); setShowWelcome(true); setIsPremium(false); setFreeQuestions(getDailyQuestions()); }
+      else {
+        setMessages([]); setChats([]); setCurrentChatId(null);
+        setShowWelcome(true); setIsPremium(false); setFreeQuestions(FREE_LIMIT);
+      }
     });
     return () => subscription.unsubscribe();
   }, []);
@@ -252,10 +247,6 @@ export default function MrInvestor() {
     }
   };
 
-  const getPremiumDailyQuestions = () => {
-    return PREMIUM_DAILY_LIMIT;
-  };
-
   const checkPremium = async (userId) => {
     const today = getTodayKey();
     const { data } = await supabase.from("profiles").select("is_premium, daily_questions_used, daily_reset_date").eq("id", userId).single();
@@ -263,8 +254,6 @@ export default function MrInvestor() {
       const premium = data.is_premium || false;
       setIsPremium(premium);
       checkFirstLogin();
-      
-      // Reset daily count if it's a new day
       if (data.daily_reset_date !== today) {
         await supabase.from("profiles").upsert({ id: userId, daily_questions_used: 0, daily_reset_date: today });
         setFreeQuestions(premium ? PREMIUM_DAILY_LIMIT : FREE_LIMIT);
@@ -273,7 +262,6 @@ export default function MrInvestor() {
         const limit = premium ? PREMIUM_DAILY_LIMIT : FREE_LIMIT;
         setFreeQuestions(Math.max(0, limit - used));
       }
-      
       if (premium) loadChats(userId);
     }
   };
@@ -293,46 +281,36 @@ export default function MrInvestor() {
     setAuthLoading(false);
   };
 
-
   const handleForgotPassword = async () => {
     if (!email) { setAuthError(lang === 'de' ? 'Bitte Email eingeben' : 'Please enter your email'); return; }
     const { error } = await supabase.auth.resetPasswordForEmail(email);
     if (error) setAuthError(error.message);
-    else { setForgotSent(true); setAuthError(lang === 'de' ? '✅ Reset-Link gesendet! Prüfe dein Postfach.' : '✅ Reset link sent! Check your inbox.'); }
+    else setAuthError(lang === 'de' ? '✅ Reset-Link gesendet! Prüfe dein Postfach.' : '✅ Reset link sent! Check your inbox.');
   };
-  const handleLogout = async () => { await supabase.auth.signOut(); };
 
-
-  const handleResetPassword = async () => {
-    if (!newPassword || newPassword.length < 6) {
-      alert(lang === 'de' ? 'Passwort muss mindestens 6 Zeichen haben' : 'Password must be at least 6 characters');
-      return;
-    }
-    const { error } = await supabase.auth.updateUser({ password: newPassword });
-    if (error) alert(error.message);
-    else { setResetSuccess(true); setTimeout(() => window.location.href = '/', 2000); }
+  const handleLogout = async () => {
+    await supabase.auth.signOut();
   };
 
   const handleChangePassword = async () => {
+    if (!user) return;
     const { error } = await supabase.auth.resetPasswordForEmail(user.email);
     if (!error) alert(lang === 'de' ? '✅ Passwort-Reset Email gesendet! Prüfe dein Postfach.' : '✅ Password reset email sent! Check your inbox.');
   };
 
-
   const deleteAccount = async () => {
+    if (!user) return;
     const confirmed = window.confirm(lang === 'de' ? 'Account wirklich löschen? Alle Daten werden permanent gelöscht.' : 'Really delete account? All data will be permanently deleted.');
     if (!confirmed) return;
     try {
       await supabase.from("messages").delete().eq("user_id", user.id);
       await supabase.from("chats").delete().eq("user_id", user.id);
       await supabase.from("profiles").delete().eq("id", user.id);
-      await supabase.auth.admin?.deleteUser(user.id);
       await supabase.auth.signOut();
     } catch {
       await supabase.auth.signOut();
     }
   };
-
 
   const incrementDailyUsage = async () => {
     if (!user) return;
@@ -357,10 +335,10 @@ export default function MrInvestor() {
     reader.readAsDataURL(file);
   };
 
-const sendMessage = async (text) => {
+  const sendMessage = async (text) => {
     const userText = text || input.trim();
     if (!userText && !selectedImage) return;
-    
+
     if (!user) {
       if (guestQuestions >= FREE_LIMIT) {
         setShowRegisterPrompt(true);
@@ -370,7 +348,7 @@ const sendMessage = async (text) => {
       setGuestQuestions(newCount);
       localStorage.setItem('guestQ', newCount.toString());
     }
-    
+
     if (user && !isPremium && freeQuestions <= 0) { setShowUpgrade(true); return; }
 
     let chatId = currentChatId;
@@ -399,7 +377,7 @@ const sendMessage = async (text) => {
     setSelectedImage(null);
     setImagePreview(null);
 
-    if (isPremium && chatId) await supabase.from("messages").insert({ user_id: user.id, chat_id: chatId, role: "user", content: userText || t.uploadImage });
+    if (isPremium && chatId && user) await supabase.from("messages").insert({ user_id: user.id, chat_id: chatId, role: "user", content: userText || t.uploadImage });
 
     if (!isPremium && user) {
       await incrementDailyUsage();
@@ -422,7 +400,7 @@ const sendMessage = async (text) => {
       const data = await response.json();
       const reply = data.content?.[0]?.text || "Error.";
       setMessages([...newMessages, { role: "assistant", content: reply }]);
-      if (isPremium && chatId) await supabase.from("messages").insert({ user_id: user.id, chat_id: chatId, role: "assistant", content: reply });
+      if (isPremium && chatId && user) await supabase.from("messages").insert({ user_id: user.id, chat_id: chatId, role: "assistant", content: reply });
     } catch { setMessages([...newMessages, { role: "assistant", content: "Connection error." }]); }
     setLoading(false);
   };
@@ -490,49 +468,6 @@ const sendMessage = async (text) => {
           <span onClick={() => setPage("datenschutz")} style={{ cursor: "pointer", color: "#555" }}>{t.datenschutz}</span>
         </div>
       </div>
-
-      {isPremium && (
-        <button onClick={() => setShowSidebar(true)} style={{ position: "fixed", bottom: "130px", left: "16px", width: "32px", height: "32px", borderRadius: "50%", background: "linear-gradient(135deg, #c9a84c, #f0d080)", border: "none", cursor: "pointer", fontSize: "13px", color: "#0a0a0f", zIndex: 40, boxShadow: "0 2px 8px rgba(201,168,76,0.3)", display: "flex", alignItems: "center", justifyContent: "center" }}>☰</button>
-      )}
-
-      {showOnboarding && (
-        <div style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.85)", display: "flex", alignItems: "center", justifyContent: "center", zIndex: 200, padding: "20px" }}>
-          <div style={{ background: "#12121a", border: "1px solid #c9a84c44", borderRadius: "16px", padding: "32px", maxWidth: "380px", width: "100%", textAlign: "center" }}>
-            <div style={{ width: "70px", height: "70px", borderRadius: "50%", background: "linear-gradient(135deg, #c9a84c, #f0d080)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "30px", fontWeight: "bold", color: "#0a0a0f", margin: "0 auto 20px" }}>M</div>
-            <h2 style={{ color: "#f0d080", fontSize: "18px", letterSpacing: "2px", marginBottom: "12px" }}>{lang === 'de' ? 'WILLKOMMEN! 🎉' : 'WELCOME! 🎉'}</h2>
-            <p style={{ color: "#c8c0b0", fontSize: "14px", lineHeight: "1.7", marginBottom: "24px" }}>
-              {lang === 'de' 
-                ? 'Mr. Investor ist dein persönlicher KI-Finanzassistent. Stelle Fragen zu ETFs, S&P 500, Sparstrategien und mehr. Du hast täglich 5 kostenlose Fragen.' 
-                : 'Mr. Investor is your personal AI finance assistant. Ask questions about ETFs, S&P 500, saving strategies and more. You have 5 free questions daily.'}
-            </p>
-            <div style={{ background: "#0a0a0f", borderRadius: "8px", padding: "12px", marginBottom: "20px" }}>
-              <div style={{ fontSize: "13px", color: "#888", marginBottom: "6px" }}>💡 {lang === 'de' ? 'Tipp' : 'Tip'}</div>
-              <div style={{ fontSize: "13px", color: "#c8c0b0" }}>{lang === 'de' ? 'Upgrade auf Premium für unbegrenzte Fragen, Chat-Verlauf und Bild-Analyse!' : 'Upgrade to Premium for unlimited questions, chat history and image analysis!'}</div>
-            </div>
-            <button onClick={() => setShowOnboarding(false)} style={{ width: "100%", background: "linear-gradient(135deg, #c9a84c, #f0d080)", color: "#0a0a0f", border: "none", padding: "14px", borderRadius: "8px", cursor: "pointer", fontWeight: "bold", fontSize: "15px" }}>
-              {lang === 'de' ? "Los geht's! 🚀" : "Let's go! 🚀"}
-            </button>
-          </div>
-        </div>
-      )}
-
-      {showRegisterPrompt && !user && (
-        <div style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.85)", display: "flex", alignItems: "center", justifyContent: "center", zIndex: 200, padding: "20px" }}>
-          <div style={{ background: "#12121a", border: "1px solid #c9a84c44", borderRadius: "16px", padding: "32px", maxWidth: "400px", width: "100%", textAlign: "center" }}>
-            <div style={{ width: "70px", height: "70px", borderRadius: "50%", background: "linear-gradient(135deg, #c9a84c, #f0d080)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "28px", fontWeight: "bold", color: "#0a0a0f", margin: "0 auto 20px" }}>M</div>
-            <h2 style={{ color: "#f0d080", fontSize: "18px", letterSpacing: "2px", marginBottom: "12px" }}>{lang === 'de' ? 'KOSTENLOS REGISTRIEREN' : 'REGISTER FOR FREE'}</h2>
-            <p style={{ color: "#c8c0b0", fontSize: "14px", lineHeight: "1.7", marginBottom: "24px" }}>
-              {lang === 'de' ? 'Du hast deine 5 kostenlosen Fragen genutzt. Registriere dich kostenlos für 5 weitere Fragen täglich!' : 'You have used your 5 free questions. Register for free for 5 more questions daily!'}
-            </p>
-            <button onClick={() => { setShowRegisterPrompt(false); }} style={{ width: "100%", background: "linear-gradient(135deg, #c9a84c, #f0d080)", color: "#0a0a0f", border: "none", padding: "14px", borderRadius: "8px", cursor: "pointer", fontWeight: "bold", fontSize: "15px", marginBottom: "10px" }}>
-              {lang === 'de' ? 'Jetzt registrieren 🚀' : 'Register now 🚀'}
-            </button>
-            <button onClick={() => setShowRegisterPrompt(false)} style={{ width: "100%", background: "transparent", border: "none", color: "#666", cursor: "pointer" }}>
-              {lang === 'de' ? 'Schließen' : 'Close'}
-            </button>
-          </div>
-        </div>
-      )}
       <LegalModal />
     </div>
   );
@@ -566,7 +501,6 @@ const sendMessage = async (text) => {
       <div style={{ borderBottom: "1px solid #2a2a3a", padding: "12px 16px", background: "linear-gradient(180deg, #12121a 0%, #0a0a0f 100%)" }}>
         <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "8px" }}>
           <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-
             <div style={{ width: "36px", height: "36px", borderRadius: "50%", background: gold, display: "flex", alignItems: "center", justifyContent: "center", fontSize: "16px", fontWeight: "bold", color: "#0a0a0f" }}>M</div>
             <div>
               <div style={{ fontSize: "15px", fontWeight: "bold", letterSpacing: "1px", color: "#f0d080" }}>{t.title}</div>
@@ -575,8 +509,10 @@ const sendMessage = async (text) => {
           </div>
           <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
             <LangSwitch />
-            <button onClick={handleChangePassword} style={{ background: "transparent", color: "#666", border: "1px solid #2a2a3a", padding: "5px 10px", borderRadius: "20px", cursor: "pointer", fontSize: "12px" }}>{lang === 'de' ? 'PW ändern' : 'Change PW'}</button>
-            <button onClick={handleLogout} style={{ background: "transparent", color: "#666", border: "1px solid #2a2a3a", padding: "5px 10px", borderRadius: "20px", cursor: "pointer", fontSize: "12px" }}>{t.logout}</button>
+            {user && <>
+              <button onClick={handleChangePassword} style={{ background: "transparent", color: "#666", border: "1px solid #2a2a3a", padding: "5px 10px", borderRadius: "20px", cursor: "pointer", fontSize: "12px" }}>{lang === 'de' ? 'PW ändern' : 'Change PW'}</button>
+              <button onClick={handleLogout} style={{ background: "transparent", color: "#666", border: "1px solid #2a2a3a", padding: "5px 10px", borderRadius: "20px", cursor: "pointer", fontSize: "12px" }}>{t.logout}</button>
+            </>}
           </div>
         </div>
         <div style={{ display: "flex", alignItems: "center", gap: "6px", flexWrap: "wrap" }}>
@@ -621,7 +557,7 @@ const sendMessage = async (text) => {
             <button onClick={() => { setSelectedImage(null); setImagePreview(null); }} style={{ position: "absolute", top: "-8px", right: "-8px", background: "#e07050", border: "none", borderRadius: "50%", width: "20px", height: "20px", cursor: "pointer", color: "white", fontSize: "12px" }}>✕</button>
           </div>
         )}
-        {!isPremium && freeQuestions <= 0 ? (
+        {user && !isPremium && freeQuestions <= 0 ? (
           <div style={{ textAlign: "center" }}>
             <p style={{ color: "#e07050", fontSize: "13px", marginBottom: "10px" }}>{t.limitReached}</p>
             <button onClick={() => setShowUpgrade(true)} style={{ background: gold, color: "#0a0a0f", border: "none", padding: "10px 24px", borderRadius: "24px", cursor: "pointer", fontWeight: "bold" }}>{t.upgradeNow}</button>
@@ -639,9 +575,11 @@ const sendMessage = async (text) => {
           </div>
         )}
         <FooterLinks />
-      <div style={{ textAlign: "center", marginTop: "4px" }}>
-        <span onClick={deleteAccount} style={{ fontSize: "10px", color: "#333", cursor: "pointer" }}>{lang === 'de' ? 'Account löschen' : 'Delete account'}</span>
-      </div>
+        {user && (
+          <div style={{ textAlign: "center", marginTop: "4px" }}>
+            <span onClick={deleteAccount} style={{ fontSize: "10px", color: "#333", cursor: "pointer" }}>{lang === 'de' ? 'Account löschen' : 'Delete account'}</span>
+          </div>
+        )}
       </div>
 
       {showUpgrade && (
@@ -663,7 +601,6 @@ const sendMessage = async (text) => {
         </div>
       )}
 
-
       {isPremium && (
         <button onClick={() => setShowSidebar(true)} style={{ position: "fixed", bottom: "130px", left: "16px", width: "32px", height: "32px", borderRadius: "50%", background: "linear-gradient(135deg, #c9a84c, #f0d080)", border: "none", cursor: "pointer", fontSize: "13px", color: "#0a0a0f", zIndex: 40, boxShadow: "0 2px 8px rgba(201,168,76,0.3)", display: "flex", alignItems: "center", justifyContent: "center" }}>☰</button>
       )}
@@ -674,9 +611,7 @@ const sendMessage = async (text) => {
             <div style={{ width: "70px", height: "70px", borderRadius: "50%", background: "linear-gradient(135deg, #c9a84c, #f0d080)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "30px", fontWeight: "bold", color: "#0a0a0f", margin: "0 auto 20px" }}>M</div>
             <h2 style={{ color: "#f0d080", fontSize: "18px", letterSpacing: "2px", marginBottom: "12px" }}>{lang === 'de' ? 'WILLKOMMEN! 🎉' : 'WELCOME! 🎉'}</h2>
             <p style={{ color: "#c8c0b0", fontSize: "14px", lineHeight: "1.7", marginBottom: "24px" }}>
-              {lang === 'de' 
-                ? 'Mr. Investor ist dein persönlicher KI-Finanzassistent. Stelle Fragen zu ETFs, S&P 500, Sparstrategien und mehr. Du hast täglich 5 kostenlose Fragen.' 
-                : 'Mr. Investor is your personal AI finance assistant. Ask questions about ETFs, S&P 500, saving strategies and more. You have 5 free questions daily.'}
+              {lang === 'de' ? 'Mr. Investor ist dein persönlicher KI-Finanzassistent. Stelle Fragen zu ETFs, S&P 500, Sparstrategien und mehr. Du hast täglich 5 kostenlose Fragen.' : 'Mr. Investor is your personal AI finance assistant. Ask questions about ETFs, S&P 500, saving strategies and more. You have 5 free questions daily.'}
             </p>
             <div style={{ background: "#0a0a0f", borderRadius: "8px", padding: "12px", marginBottom: "20px" }}>
               <div style={{ fontSize: "13px", color: "#888", marginBottom: "6px" }}>💡 {lang === 'de' ? 'Tipp' : 'Tip'}</div>
@@ -706,7 +641,9 @@ const sendMessage = async (text) => {
           </div>
         </div>
       )}
+
       <LegalModal />
+
       {showInstallBanner && (
         <div style={{ position: "fixed", bottom: "80px", left: "50%", transform: "translateX(-50%)", background: "#12121a", border: "1px solid #c9a84c44", borderRadius: "12px", padding: "12px 16px", display: "flex", alignItems: "center", gap: "10px", zIndex: 50, maxWidth: "340px", width: "calc(100% - 32px)", boxShadow: "0 4px 20px rgba(0,0,0,0.5)" }}>
           <span style={{ fontSize: "20px" }}>📱</span>
@@ -721,4 +658,4 @@ const sendMessage = async (text) => {
       <style>{`@keyframes pulse { 0%, 100% { opacity: 0.3; } 50% { opacity: 1; } } * { margin: 0; padding: 0; box-sizing: border-box; } body { background: #0a0a0f; margin: 0; padding: 0; }`}</style>
     </div>
   );
-}
+    }
