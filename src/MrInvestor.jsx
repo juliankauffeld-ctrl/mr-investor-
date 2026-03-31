@@ -357,11 +357,21 @@ export default function MrInvestor() {
     reader.readAsDataURL(file);
   };
 
-  const sendMessage = async (text) => {
+const sendMessage = async (text) => {
     const userText = text || input.trim();
     if (!userText && !selectedImage) return;
-    if (!user) return;
-    if (!isPremium && freeQuestions <= 0) { setShowUpgrade(true); return; }
+    
+    if (!user) {
+      if (guestQuestions >= FREE_LIMIT) {
+        setShowRegisterPrompt(true);
+        return;
+      }
+      const newCount = guestQuestions + 1;
+      setGuestQuestions(newCount);
+      localStorage.setItem('guestQ', newCount.toString());
+    }
+    
+    if (user && !isPremium && freeQuestions <= 0) { setShowUpgrade(true); return; }
 
     let chatId = currentChatId;
     if (isPremium) {
