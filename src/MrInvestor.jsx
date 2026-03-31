@@ -197,8 +197,11 @@ export default function MrInvestor() {
     supabase.auth.getSession().then(({ data: { session } }) => {
       setUser(session?.user ?? null);
       setAuthChecked(true);
-      if (session?.user) checkPremium(session.user.id);
-    });
+      if (session?.user) {
+  checkPremium(session.user.id);
+  setGuestQuestions(0);
+  localStorage.setItem('guestQ', '0');
+      }
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
       setUser(session?.user ?? null);
       if (session?.user) checkPremium(session.user.id);
