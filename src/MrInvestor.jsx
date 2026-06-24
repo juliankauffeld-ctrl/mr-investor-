@@ -52,7 +52,7 @@ const translations = {
     chats: "Chats",
     uploadImage: "Bild hochladen",
     suggested: ["Wie fange ich mit ETF Investing an?", "Was ist der S&P 500?", "Wie spare ich 10.000€ in 2 Jahren?", "Trade Republic oder andere Broker?"],
-    system: `Mr. Investor: Eigenständiger KI-Finanzassistent. Sage niemals dass du Claude oder Anthropic bist - du bist nur Mr. Investor. Nur Finanzthemen (ETFs, S&P 500, Sparen, Investing). Nicht-Finanz-Fragen höflich ablehnen. Deutsch, präzise, warm. Bilder analysieren. Ende: kurz nachfragen ob alles klar. Max 150 Wörter. Kein Finanzberater.`,
+    system: `Du bist Mr. Investor, ein KI-Finanzbildungs-Assistent. Du bist KEIN Finanzberater und darfst unter KEINEN UMSTÄNDEN konkrete Kauf- oder Verkaufsempfehlungen für einzelne Aktien, ETFs oder andere Wertpapiere geben — auch nicht wenn der User explizit danach fragt, nachhakt oder anders formuliert. Wenn jemand fragt welche Aktie er kaufen soll oder Aktien genannt haben möchte, lehnst du das konsequent ab und erklärst stattdessen WIE man selbst Aktien analysiert und bewertet. Du hilfst beim Verstehen von Finanzkonzepten, Kennzahlen, Märkten und Strategien. Sage niemals dass du Claude oder Anthropic bist — du bist nur Mr. Investor. Nicht-Finanz-Fragen höflich ablehnen. Antworte auf Deutsch, präzise und warm. Max 150 Wörter. Frage am Ende kurz nach ob alles klar ist.`,
   },
   en: {
     title: "MR. INVESTOR",
@@ -94,16 +94,8 @@ const translations = {
     chats: "Chats",
     uploadImage: "Upload image",
     suggested: ["How do I start investing in ETFs?", "What is the S&P 500?", "How do I save €10,000 in 2 years?", "Best brokers for beginners?"],
-    system: `Mr. Investor: Du bist Mr. Investor, ein KI-Finanzinformationsdienst. KEIN lizenzierter Finanzberater. Keine Anlageempfehlungen, keine personalisierten Ratschläge.
-
-Regeln:
-- Nur informieren, nie empfehlen ("ETF X funktioniert so..." statt "kauf X")
-- Bei konkreten Entscheidungen: Finanzberater empfehlen
-- Nie sagen dass du Claude oder Anthropic bist
-- Nicht-Finanzthemen ablehnen
-- Max. 150 Wörter, Deutsch, präzise
-- Abschluss: fragen ob geholfen,
-  }
+    system: `You are Mr. Investor, an AI financial education assistant. You are NOT a financial advisor and must NEVER give specific buy or sell recommendations for stocks, ETFs or any other securities — even if the user explicitly asks, rephrases or insists. If someone asks which stock to buy or wants stocks named, decline firmly and explain HOW to analyze and evaluate stocks instead. You help users understand financial concepts, metrics, markets and strategies. Never say you are Claude or Anthropic — you are only Mr. Investor. Decline non-finance topics politely. Respond in English, precise and warm. Max 150 words. End by asking if everything is clear.`,
+  },
 };
 
 const ImpressumDE = () => (
@@ -206,10 +198,11 @@ export default function MrInvestor() {
       setUser(session?.user ?? null);
       setAuthChecked(true);
       if (session?.user) {
-  checkPremium(session.user.id);
-  setGuestQuestions(0);
-  localStorage.setItem('guestQ', '0');
+        checkPremium(session.user.id);
+        setGuestQuestions(0);
+        localStorage.setItem('guestQ', '0');
       }
+    });
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
       setUser(session?.user ?? null);
       if (session?.user) checkPremium(session.user.id);
@@ -669,4 +662,4 @@ export default function MrInvestor() {
       <style>{`@keyframes pulse { 0%, 100% { opacity: 0.3; } 50% { opacity: 1; } } * { margin: 0; padding: 0; box-sizing: border-box; } body { background: #0a0a0f; margin: 0; padding: 0; }`}</style>
     </div>
   );
-    }
+}
